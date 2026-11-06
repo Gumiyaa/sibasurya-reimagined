@@ -1,0 +1,456 @@
+---
+import { Picture } from 'astro:assets';
+import { company } from '@/data/company';
+import { images } from '@/data/images';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <div class="shell hero__inner">
+    <div class="hero__content">
+      <div class="hero__meta">
+        <SectionLabel index="01" text="Integrated heavy freight" />
+        <span class="hero__est">Semarang · est. 1951</span>
+      </div>
+
+      <h1 class="display hero__title" id="hero-title">
+        <span class="hero__line">Terbesar.</span>
+        <span class="hero__line">Terlengkap.</span>
+        <span class="hero__line hero__line--accent">Terbaik.</span>
+      </h1>
+
+      <div class="hero__lower">
+        <p class="hero__body">{company.heroBody}</p>
+
+        <div class="hero__actions">
+          <PrimaryButton href="/fleet/" icon="arrow-right">Jelajahi armada</PrimaryButton>
+          <SecondaryButton href="/contact/" icon="arrow-up-right">Konsultasi rute</SecondaryButton>
+        </div>
+      </div>
+
+      <ul class="hero__facts" aria-label="Ringkasan kapabilitas operasional">
+        <li>
+          <strong class="num">1.600+</strong>
+          <span>Unit armada aktif</span>
+        </li>
+        <li>
+          <strong class="num">10</strong>
+          <span>Depot &amp; hub</span>
+        </li>
+        <li>
+          <strong class="num">24/7</strong>
+          <span>Command desk</span>
+        </li>
+        <li>
+          <strong class="num">2</strong>
+          <span>Pulau terjangkau</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="hero__visual">
+      <div class="hero__media corner-marks">
+        <Picture
+          src={images.heroTruck}
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          widths={[520, 760, 1040, 1400]}
+          sizes="(min-width: 64rem) 44vw, 100vw"
+          quality={80}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          alt="Truk trailer heavy haulage melintas pada malam hari"
+          class="hero__picture"
+        />
+
+        <span class="hero__scrim" aria-hidden="true"></span>
+
+        <div class="hero__badge">
+          <span class="hero__pulse" aria-hidden="true"></span>
+          <span>Active prime mover<br />on network</span>
+        </div>
+
+        <p class="hero__vertical">Pantura · Trans-Jawa · Lintas Sumatra</p>
+
+        <div class="hero__overlay">
+          <div class="hero__overlay-top">
+            <span class="micro">Fleet identifier</span>
+            <span class="hero__code">SBS · HVY — 001</span>
+          </div>
+          <div class="hero__overlay-bottom">
+            <div>
+              <p class="hero__class">Heavy haulage</p>
+              <p class="hero__capacity num">55–65<span>ton</span></p>
+            </div>
+            <span class="hero__overlay-icon" aria-hidden="true">
+              <Icon name="truck" size={26} />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__caption">
+        <span>Cinematic fleet documentation — temporary licensed photography</span>
+        <span class="hero__caption-code">01 / 09</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(1100px 560px at 82% 8%, rgba(226, 29, 46, 0.09), transparent 62%),
+      var(--ink);
+  }
+
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(41, 46, 56, 0.32) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(41, 46, 56, 0.32) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-block: clamp(2.25rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  @media (min-width: 64rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+      gap: clamp(2.5rem, 4vw, 4.5rem);
+      padding-block: clamp(2.75rem, 4.2vw, 4rem) clamp(3rem, 4.5vw, 4.5rem);
+    }
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero__est {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    margin-top: clamp(1.4rem, 2.6vw, 2.2rem);
+    font-size: clamp(3.9rem, 8.2vw, 8.6rem);
+    font-weight: 600;
+    line-height: 0.79;
+    letter-spacing: -0.018em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  .hero__line--accent {
+    color: var(--accent-ink);
+  }
+
+  .hero__lower {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    margin-top: clamp(1.5rem, 2.8vw, 2.1rem);
+    max-width: 40rem;
+  }
+
+  .hero__body {
+    max-width: 46ch;
+    font-size: var(--fs-body);
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .hero__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-top: auto;
+    padding-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  @media (min-width: 34rem) {
+    .hero__facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .hero__facts li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.7rem 0.9rem 0.7rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__facts li + li {
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .hero__facts strong {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+  }
+
+  .hero__facts span {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* Visual ------------------------------------------------------------- */
+  .hero__visual {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .hero__media {
+    position: relative;
+    flex: 1;
+    min-height: clamp(23rem, 46vw, 38rem);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  @media (min-width: 64rem) {
+    .hero__media {
+      min-height: 100%;
+    }
+  }
+
+  .hero__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__media :global(picture),
+  .hero__media :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    object-fit: cover;
+    object-position: center 42%;
+    filter: grayscale(0.25) contrast(1.05) brightness(0.86);
+    transform: scale(1.005);
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(8, 10, 14, 0.55) 0%, rgba(8, 10, 14, 0.04) 34%, rgba(8, 10, 14, 0.82) 100%),
+      linear-gradient(90deg, rgba(8, 10, 14, 0.4), transparent 45%);
+    pointer-events: none;
+  }
+
+  .hero__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid rgba(242, 242, 242, 0.18);
+    background: rgba(8, 10, 14, 0.62);
+    font-size: 0.58rem;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper-soft);
+    backdrop-filter: blur(6px);
+  }
+
+  .hero__pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(226, 29, 46, 0.5);
+    animation: hero-pulse 2.8s ease-out infinite;
+    flex: none;
+  }
+
+  @keyframes hero-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(226, 29, 46, 0.45);
+    }
+    70% {
+      box-shadow: 0 0 0 7px rgba(226, 29, 46, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(226, 29, 46, 0);
+    }
+  }
+
+  .hero__vertical {
+    position: absolute;
+    top: 1.1rem;
+    right: 0.75rem;
+    writing-mode: vertical-rl;
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(242, 242, 242, 0.55);
+  }
+
+  .hero__overlay {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .hero__overlay-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(242, 242, 242, 0.22);
+  }
+
+  .hero__overlay-top .micro {
+    color: rgba(242, 242, 242, 0.55);
+  }
+
+  .hero__code {
+    font-size: 0.56rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--paper);
+  }
+
+  .hero__overlay-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .hero__class {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper-soft);
+  }
+
+  .hero__capacity {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 600;
+    line-height: 0.9;
+    color: var(--paper);
+  }
+
+  .hero__capacity span {
+    font-family: var(--font-body);
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .hero__overlay-icon {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid rgba(242, 242, 242, 0.24);
+    color: var(--paper-soft);
+  }
+
+  .hero__caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.55rem;
+    font-size: 0.54rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .hero__caption-code {
+    flex: none;
+    color: var(--muted);
+  }
+
+  @media (max-width: 47.99rem) {
+    .hero__caption {
+      display: none;
+    }
+
+    .hero__media {
+      aspect-ratio: 4 / 4.6;
+      min-height: 0;
+    }
+  }
+</style>

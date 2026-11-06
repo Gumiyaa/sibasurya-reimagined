@@ -1,0 +1,483 @@
+---
+import { Image } from 'astro:assets';
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { newsArticles, newsCategories } from '@/data/news';
+import { company } from '@/data/company';
+
+const heroImage = newsArticles[0]?.image;
+---
+
+<MainLayout
+  title="Berita & Editorial — PT Siba Surya"
+  description="Kabar, catatan operasional, dan editorial PT Siba Surya seputar armada, layanan, serta jaringan logistik industrial di Jawa dan Sumatra."
+  noindex
+>
+  <PageHero
+    index="N1"
+    label="Newsroom · editorial"
+    code="News index · draft review"
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Berita' },
+    ]}
+    titleLines={['Catatan dari', { text: 'lintasan industri.', accent: true }]}
+    lead="Ruang editorial untuk kabar perusahaan, catatan operasional, dan penjelasan teknis seputar armada serta jaringan logistik industrial."
+    image={heroImage}
+    imageAlt="Truk trailer melintas di jalan pegunungan pada malam hari"
+    imageCaption="Dokumentasi operasional — fotografi stok sementara"
+    meta={[
+      { label: 'Status', value: 'Draft editorial' },
+      { label: 'Kategori', value: '04 topik' },
+      { label: 'Artikel', value: `${newsArticles.length} draf` },
+      { label: 'Publikasi', value: 'Menunggu persetujuan' },
+    ]}
+  />
+
+  <section class="news-index section" aria-labelledby="news-index-title">
+    <div class="shell">
+      <div class="draft-banner" role="note">
+        <span class="draft-banner__label">
+          <Icon name="file" size={13} />
+          Draft editorial
+        </span>
+        <p>
+          Situs lama tidak memiliki berita yang diterbitkan. Empat artikel di bawah
+          adalah draf editorial untuk menguji template, bukan pengumuman resmi.
+          Tanggal, peristiwa, dan klaim perusahaan belum diverifikasi. Halaman ini
+          sengaja tidak diindeks mesin pencari sampai konten resmi tersedia.
+        </p>
+      </div>
+
+      <div class="news-index__head">
+        <div>
+          <SectionLabel index="01" text="Indeks artikel" />
+          <SectionHeading
+            id="news-index-title"
+            class="news-index__heading"
+            lines={['Pilih topik', { text: 'yang relevan.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy news-index__lead">
+          Filter berdasarkan kategori. Semua kartu membuka halaman artikel dengan
+          penanda status draf yang sama.
+        </p>
+      </div>
+
+      <div class="news-toolbar" role="group" aria-label="Filter kategori berita">
+        <div class="news-toolbar__filters">
+          {newsCategories.map((category, index) => (
+            <button
+              class:list={['news-filter', { 'is-active': index === 0 }]}
+              type="button"
+              data-news-filter={category}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+        <p class="news-toolbar__count" aria-live="polite">
+          <span data-news-count>{newsArticles.length}</span> artikel
+        </p>
+      </div>
+
+      <div class="news-grid" data-news-grid>
+        {newsArticles.map((article) => (
+          <article class="news-card" data-news-item data-category={article.category} data-reveal>
+            <a class="news-card__link" href={`/news/${article.slug}/`}>
+              <div class="news-card__media">
+                <Image
+                  src={article.image}
+                  alt={article.alt}
+                  widths={[400, 600, 820]}
+                  sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 100vw"
+                  format="webp"
+                  quality={74}
+                  loading="lazy"
+                  decoding="async"
+                  class="news-card__image"
+                />
+                <span class="news-card__category">{article.category}</span>
+                <span class="news-card__draft">Draft</span>
+              </div>
+
+              <div class="news-card__body">
+                <div class="news-card__meta">
+                  <span>{article.readingTime}</span>
+                  <span>Belum terbit</span>
+                </div>
+                <h2 class="news-card__title">{article.title}</h2>
+                <p class="news-card__excerpt">{article.excerpt}</p>
+                <span class="news-card__cta">
+                  Baca draf
+                  <Icon name="arrow-up-right" size={13} />
+                </span>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <div class="news-index__empty" data-news-empty hidden>
+        <p>Tidak ada artikel pada kategori ini.</p>
+      </div>
+
+      <div class="news-index__foot">
+        <p class="news-index__note">
+          <Icon name="mail" size={13} />
+          <span>
+            Pertanyaan media dan permintaan informasi resmi dapat diarahkan ke
+            <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>.
+          </span>
+        </p>
+        <div class="news-index__actions">
+          <PrimaryButton href="/contact/" icon="arrow-right">Hubungi perusahaan</PrimaryButton>
+          <SecondaryButton href="/about/" icon="arrow-up-right">Profil perusahaan</SecondaryButton>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-news-filter]'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-news-item]'));
+  const count = document.querySelector<HTMLElement>('[data-news-count]');
+  const empty = document.querySelector<HTMLElement>('[data-news-empty]');
+
+  const apply = (filter: string, active: HTMLButtonElement) => {
+    buttons.forEach((button) => {
+      const isActive = button === active;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    let visible = 0;
+    items.forEach((item) => {
+      const show = filter === 'Semua' || item.dataset.category === filter;
+      item.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible > 0;
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      apply(button.dataset.newsFilter ?? 'Semua', button);
+    });
+  });
+</script>
+
+<style>
+  .draft-banner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--accent-line);
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+  }
+
+  @media (min-width: 48rem) {
+    .draft-banner {
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+  }
+
+  .draft-banner__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .draft-banner p {
+    max-width: 78ch;
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--paper-soft);
+  }
+
+  .news-index__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  @media (min-width: 56rem) {
+    .news-index__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .news-index__heading {
+    margin-top: 1rem;
+  }
+
+  .news-index__lead {
+    max-width: 38ch;
+  }
+
+  .news-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .news-toolbar__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .news-filter {
+    min-height: 2.2rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      border-color var(--dur),
+      background var(--dur),
+      color var(--dur);
+  }
+
+  .news-filter:hover {
+    border-color: var(--line-strong);
+    color: var(--paper);
+  }
+
+  .news-filter.is-active {
+    border-color: var(--accent-ink);
+    background: var(--accent-soft);
+    color: var(--paper);
+  }
+
+  .news-toolbar__count {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .news-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .news-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .news-card[hidden] {
+    display: none;
+  }
+
+  .news-card {
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.32);
+    transition:
+      border-color var(--dur),
+      background var(--dur);
+  }
+
+  .news-card:hover {
+    border-color: var(--line-strong);
+    background: rgba(23, 28, 37, 0.65);
+  }
+
+  .news-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .news-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .news-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.35) contrast(1.03) brightness(0.8);
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .news-card:hover .news-card__image {
+    transform: scale(1.03);
+  }
+
+  .news-card__category,
+  .news-card__draft {
+    position: absolute;
+    top: 0.65rem;
+    padding: 0.26rem 0.4rem;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .news-card__category {
+    left: 0.65rem;
+    background: rgba(8, 10, 14, 0.75);
+    border: 1px solid rgba(242, 242, 242, 0.18);
+    color: var(--paper-soft);
+  }
+
+  .news-card__draft {
+    right: 0.65rem;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: #ff8b95;
+  }
+
+  .news-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .news-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .news-card__title {
+    margin-top: 0.7rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.65vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .news-card__excerpt {
+    margin-top: 0.55rem;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .news-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .news-card:hover .news-card__cta {
+    color: var(--accent-ink);
+  }
+
+  .news-index__empty {
+    padding: 2rem 0;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  .news-index__empty[hidden] {
+    display: none;
+  }
+
+  .news-index__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .news-index__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    max-width: 54ch;
+    font-size: 0.66rem;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+
+  .news-index__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .news-index__note a {
+    color: var(--paper-soft);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .news-index__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

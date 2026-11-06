@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '@/types/icons';
+
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit';
+  icon?: IconName;
+  block?: boolean;
+  class?: string;
+  ariaLabel?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  type = 'button',
+  icon = 'arrow-up-right',
+  block = false,
+  class: className,
+  ariaLabel,
+  target,
+  rel,
+} = Astro.props;
+---
+
+{
+  href ? (
+    <a
+      class:list={['btn', 'btn--ghost', { 'btn--block': block }, className]}
+      href={href}
+      aria-label={ariaLabel}
+      target={target}
+      rel={rel}
+    >
+      <slot />
+      <Icon name={icon} size={16} />
+    </a>
+  ) : (
+    <button
+      class:list={['btn', 'btn--ghost', { 'btn--block': block }, className]}
+      type={type}
+      aria-label={ariaLabel}
+    >
+      <slot />
+      <Icon name={icon} size={16} />
+    </button>
+  )
+}

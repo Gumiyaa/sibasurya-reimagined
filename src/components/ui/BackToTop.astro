@@ -1,0 +1,92 @@
+---
+import Icon from './Icon.astro';
+---
+
+<button class="back-to-top" type="button" data-back-to-top aria-label="Kembali ke atas halaman">
+  <Icon name="arrow-up" size={16} />
+  <span class="back-to-top__label">Atas</span>
+</button>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    right: clamp(0.9rem, 2.4vw, 1.75rem);
+    bottom: clamp(0.9rem, 2.4vw, 1.75rem);
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--line-strong);
+    background: rgba(11, 14, 19, 0.9);
+    backdrop-filter: blur(8px);
+    color: var(--paper);
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+      opacity var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out),
+      visibility var(--dur),
+      border-color var(--dur);
+  }
+
+  .back-to-top[data-visible='true'] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .back-to-top:hover {
+    border-color: var(--accent-ink);
+    color: var(--accent-ink);
+  }
+
+  .back-to-top svg {
+    flex: none;
+  }
+
+  .back-to-top__label {
+    display: none;
+  }
+
+  @media (min-width: 56rem) {
+    .back-to-top__label {
+      display: inline;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+  if (button) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let ticking = false;
+
+    const update = () => {
+      const visible = window.scrollY > window.innerHeight * 0.9;
+      button.dataset.visible = visible ? 'true' : 'false';
+      ticking = false;
+    };
+
+    update();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+
+    button.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    });
+  }
+</script>

@@ -1,0 +1,712 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import TechnicalDataTable from '@/components/ui/TechnicalDataTable.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import BranchCard from '@/components/sections/BranchCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { branches } from '@/data/branches';
+import { corridors } from '@/data/corridors';
+import { images } from '@/data/images';
+
+const islandFilters = ['Semua', 'Jawa', 'Sumatra'];
+
+const corridorRows = corridors.map((corridor) => [
+  { text: corridor.index, mono: true },
+  corridor.route,
+  { text: corridor.distance, mono: true },
+  corridor.commodities,
+  { text: corridor.status, accent: true },
+]);
+
+
+---
+
+<MainLayout
+  title="Jaringan & Rute — PT Siba Surya"
+  description="Jaringan operasional PT Siba Surya: 10 depot dan hub di Jawa dan Sumatra, dengan koridor Pantura, Trans-Jawa, dan Lintas Sumatra yang dipantau command desk 24/7."
+>
+  <PageHero
+    index="05"
+    label="Strategic corridor network"
+    code="Network index · 10 depots"
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Jaringan' },
+    ]}
+    titleLines={['Dua pulau,', { text: 'satu jaringan kendali.', accent: true }]}
+    lead="Sepuluh depot dan hub menghubungkan pelabuhan, sentra manufaktur, dan proyek infrastruktur. Setiap koridor memiliki titik pantau serta jalur komunikasi dispatch yang jelas."
+    image={images.port}
+    imageAlt="Aktivitas bongkar muat peti kemas di kawasan pelabuhan"
+    imageCaption="Aktivitas pelabuhan — fotografi stok sementara"
+    meta={[
+      { label: 'Depot & hub', value: '10 lokasi' },
+      { label: 'Koridor utama', value: '04 koridor' },
+      { label: 'Pulau', value: 'Jawa · Sumatra' },
+      { label: 'Command desk', value: '24/7 · Semarang' },
+    ]}
+  />
+
+  <section class="network-overview section" aria-labelledby="network-overview-title">
+    <div class="shell">
+      <div class="network-overview__head">
+        <div>
+          <SectionLabel index="01" text="Peta jaringan" />
+          <SectionHeading
+            id="network-overview-title"
+            class="network-overview__heading"
+            lines={['Titik temu', { text: 'arus barang industri.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy network-overview__lead">
+          Diagram berikut memetakan posisi relatif depot terhadap koridor utama. Ini
+          adalah skema operasional, bukan peta geografis berskala.
+        </p>
+      </div>
+
+      <div class="network-overview__grid">
+        <figure class="network-map-wrap">
+          <div class="network-map">
+            <span class="network-map__grid" aria-hidden="true"></span>
+            <span class="network-map__axis network-map__axis--x" aria-hidden="true">Jawa — Sumatra</span>
+            <span class="network-map__axis network-map__axis--y" aria-hidden="true">Utara — Selatan</span>
+
+            {branches.map((branch) => (
+              <a
+                class:list={['network-map__node', { 'is-hq': branch.status === 'HQ' }]}
+                href={`/network/${branch.slug}/`}
+                style={`left: ${branch.mapPosition.x}%; top: ${branch.mapPosition.y}%`}
+                aria-label={`${branch.city} — ${branch.role}`}
+              >
+                <span class="network-map__dot" aria-hidden="true"></span>
+                <span class="network-map__label">{branch.city}</span>
+              </a>
+            ))}
+          </div>
+          <figcaption class="network-map__caption">
+            <span>Diagram skematik jaringan depot</span>
+            <span>Posisi tidak menggambarkan koordinat sebenarnya</span>
+          </figcaption>
+        </figure>
+
+        <aside class="network-overview__aside" aria-label="Ringkasan jaringan">
+          <dl class="network-stats">
+            <div>
+              <dt>Depot &amp; hub</dt>
+              <dd class="num">10</dd>
+            </div>
+            <div>
+              <dt>Koridor utama</dt>
+              <dd class="num">04</dd>
+            </div>
+            <div>
+              <dt>Pulau</dt>
+              <dd class="num">02</dd>
+            </div>
+            <div>
+              <dt>Command desk</dt>
+              <dd class="num">24/7</dd>
+            </div>
+          </dl>
+
+          <InformationPanel label="Kantor pusat" index="HQ" title="Semarang">
+            <p>Command desk dan central workshop beroperasi dari Semarang, Jawa Tengah.</p>
+            <p class="network-overview__hq-line">Jl. Terboyo No. 7, Genuk · 50112</p>
+          </InformationPanel>
+
+          <InformationPanel label="Status data" index="VER" tone="accent">
+            <p>
+              Alamat dan kontak resmi cabang selain kantor pusat masih menunggu
+              verifikasi. Halaman cabang tidak memuat data kontak yang belum terkonfirmasi.
+            </p>
+          </InformationPanel>
+        </aside>
+      </div>
+
+      <div class="network-overview__table">
+        <div class="network-overview__table-head">
+          <span class="micro">Corridor index · indicative distance</span>
+          <span class="micro">Status operasional</span>
+        </div>
+        <TechnicalDataTable
+          caption="Koridor operasional utama — jarak indikatif, bukan jadwal atau tarif"
+          columns={['Kode', 'Koridor', 'Jarak', 'Komoditas', 'Status']}
+          rows={corridorRows}
+          minWidth="54rem"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="branch-directory section section--ink-2" aria-labelledby="branch-directory-title">
+    <div class="shell">
+      <div class="branch-directory__head">
+        <div>
+          <SectionLabel index="02" text="Direktori depot" />
+          <SectionHeading
+            id="branch-directory-title"
+            class="branch-directory__heading"
+            lines={['Temukan titik', { text: 'operasional terdekat.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy branch-directory__lead">
+          Cari berdasarkan kota, wilayah, komoditas, atau koridor. Setiap kartu membuka
+          halaman ringkasan cabang.
+        </p>
+      </div>
+
+      <div class="branch-toolbar">
+        <div class="branch-toolbar__search">
+          <label class="sr-only" for="branch-search">Cari cabang</label>
+          <Icon name="search" size={15} />
+          <input
+            id="branch-search"
+            type="search"
+            placeholder="Cari kota, wilayah, komoditas…"
+            autocomplete="off"
+            data-branch-search
+          />
+        </div>
+
+        <div class="branch-toolbar__filters" role="group" aria-label="Filter pulau">
+          {islandFilters.map((island, index) => (
+            <button
+              class:list={['branch-filter', { 'is-active': index === 0 }]}
+              type="button"
+              data-branch-island={island}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              {island}
+            </button>
+          ))}
+        </div>
+
+        <p class="branch-toolbar__count" aria-live="polite">
+          <span data-branch-count>{branches.length}</span> depot
+        </p>
+      </div>
+
+      <div class="branch-directory__grid" data-branch-grid>
+        {branches.map((branch) => (
+          <div
+            class="branch-directory__item"
+            data-branch-item
+            data-island={branch.island}
+            data-search={`${branch.city} ${branch.region} ${branch.island} ${branch.role} ${branch.coverage} ${branch.corridor} ${branch.commodities.join(' ')}`.toLowerCase()}
+          >
+            <BranchCard branch={branch} />
+          </div>
+        ))}
+      </div>
+
+      <div class="branch-directory__empty" data-branch-empty hidden>
+        <p>Tidak ada depot yang cocok dengan pencarian.</p>
+        <button class="link-arrow" type="button" data-branch-reset>
+          Reset filter
+          <Icon name="arrow-right" size={15} />
+        </button>
+      </div>
+
+      <div class="branch-directory__note">
+        <Icon name="globe" size={14} />
+        <p>
+          Daftar cabang mengacu pada approved design reference. Detail alamat, nomor
+          telepon, dan jam operasional cabang akan ditambahkan setelah verifikasi resmi.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="network-cta section" aria-labelledby="network-cta-title">
+    <div class="shell network-cta__inner">
+      <div>
+        <SectionLabel index="03" text="Perencanaan rute" />
+        <h2 class="display display--h2 network-cta__title" id="network-cta-title">
+          Punya rute yang <span class="accent">belum terpetakan?</span>
+        </h2>
+        <p class="copy network-cta__copy">
+          Sampaikan asal, tujuan, dan karakter muatan. Tim dispatch akan menilai
+          kelayakan koridor, perizinan, dan ketersediaan unit.
+        </p>
+      </div>
+      <div class="network-cta__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Konsultasi rute</PrimaryButton>
+        <SecondaryButton href="/fleet/" icon="arrow-up-right">Lihat armada</SecondaryButton>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>('[data-branch-search]');
+  const islandButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-branch-island]'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-branch-item]'));
+  const count = document.querySelector<HTMLElement>('[data-branch-count]');
+  const empty = document.querySelector<HTMLElement>('[data-branch-empty]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-branch-reset]');
+
+  let activeIsland = 'Semua';
+
+  const apply = () => {
+    const query = (searchInput?.value ?? '').trim().toLowerCase();
+    let visible = 0;
+
+    items.forEach((item) => {
+      const matchesIsland = activeIsland === 'Semua' || item.dataset.island === activeIsland;
+      const haystack = item.dataset.search ?? '';
+      const matchesQuery = query.length === 0 || haystack.includes(query);
+      const show = matchesIsland && matchesQuery;
+      item.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible > 0;
+  };
+
+  islandButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      activeIsland = button.dataset.branchIsland ?? 'Semua';
+      islandButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      apply();
+    });
+  });
+
+  searchInput?.addEventListener('input', apply);
+
+  reset?.addEventListener('click', () => {
+    activeIsland = 'Semua';
+    if (searchInput) searchInput.value = '';
+    islandButtons.forEach((item, index) => {
+      const active = index === 0;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    apply();
+  });
+</script>
+
+<style>
+  .network-overview__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .network-overview__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .network-overview__heading {
+    margin-top: 1rem;
+  }
+
+  .network-overview__lead {
+    max-width: 38ch;
+  }
+
+  .network-overview__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .network-overview__grid {
+      grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 0.55fr);
+    }
+  }
+
+  .network-map-wrap {
+    margin: 0;
+  }
+
+  .network-map {
+    position: relative;
+    min-height: clamp(24rem, 42vw, 34rem);
+    border: 1px solid var(--line-strong);
+    background:
+      radial-gradient(600px 320px at 70% 30%, rgba(226, 29, 46, 0.07), transparent 70%),
+      rgba(8, 10, 14, 0.5);
+    overflow: hidden;
+  }
+
+  .network-map__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(41, 46, 56, 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(41, 46, 56, 0.4) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(circle at 50% 50%, black 25%, transparent 92%);
+    pointer-events: none;
+  }
+
+  .network-map__axis {
+    position: absolute;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    pointer-events: none;
+  }
+
+  .network-map__axis--x {
+    left: 1rem;
+    bottom: 0.75rem;
+  }
+
+  .network-map__axis--y {
+    top: 1rem;
+    left: 0.9rem;
+    writing-mode: vertical-rl;
+  }
+
+  .network-map__node {
+    position: absolute;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .network-map__dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--paper-soft);
+    background: var(--ink);
+    transition:
+      background var(--dur),
+      border-color var(--dur),
+      transform var(--dur);
+  }
+
+  .network-map__node.is-hq .network-map__dot {
+    width: 11px;
+    height: 11px;
+    border-color: var(--accent-ink);
+    background: var(--accent);
+  }
+
+  .network-map__label {
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .network-map__node:hover,
+  .network-map__node:focus-visible {
+    color: var(--paper);
+  }
+
+  .network-map__node:hover .network-map__dot,
+  .network-map__node:focus-visible .network-map__dot {
+    background: var(--accent);
+    border-color: var(--accent-ink);
+    transform: scale(1.35);
+  }
+
+  .network-map__caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.4rem 1rem;
+    padding-top: 0.55rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .network-overview__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .network-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line);
+  }
+
+  .network-stats > div {
+    padding: 0.8rem 0.8rem 0.8rem 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding-left: 0.8rem;
+  }
+
+  .network-stats dt {
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .network-stats dd {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--paper);
+  }
+
+  .network-overview__hq-line {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-xs);
+    color: var(--paper-soft);
+  }
+
+  .network-overview__table {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .network-overview__table-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+  }
+
+  /* Directory ----------------------------------------------------------- */
+  .branch-directory__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .branch-directory__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .branch-directory__heading {
+    margin-top: 1rem;
+  }
+
+  .branch-directory__lead {
+    max-width: 38ch;
+  }
+
+  .branch-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .branch-toolbar__search {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex: 1 1 16rem;
+    max-width: 26rem;
+    min-height: 2.65rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.5);
+  }
+
+  .branch-toolbar__search svg {
+    flex: none;
+    color: var(--dim);
+  }
+
+  .branch-toolbar__search input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--paper);
+    font-size: var(--fs-sm);
+    min-height: 2.6rem;
+  }
+
+  .branch-toolbar__search input::placeholder {
+    color: #596170;
+  }
+
+  .branch-toolbar__search input:focus {
+    outline: none;
+  }
+
+  .branch-toolbar__search:focus-within {
+    border-color: var(--accent-ink);
+  }
+
+  .branch-toolbar__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .branch-filter {
+    min-height: 2.2rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      border-color var(--dur),
+      background var(--dur),
+      color var(--dur);
+  }
+
+  .branch-filter:hover {
+    border-color: var(--line-strong);
+    color: var(--paper);
+  }
+
+  .branch-filter.is-active {
+    border-color: var(--accent-ink);
+    background: var(--accent-soft);
+    color: var(--paper);
+  }
+
+  .branch-toolbar__count {
+    margin-left: auto;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .branch-directory__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .branch-directory__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .branch-directory__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .branch-directory__item[hidden] {
+    display: none;
+  }
+
+  .branch-directory__empty {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.35);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  .branch-directory__empty[hidden] {
+    display: none;
+  }
+
+  .branch-directory__empty .link-arrow {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+
+  .branch-directory__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.4rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+
+  .branch-directory__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .branch-directory__note p {
+    max-width: 78ch;
+  }
+
+  /* CTA ----------------------------------------------------------------- */
+  .network-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .network-cta__title {
+    margin-top: 1rem;
+  }
+
+  .network-cta__copy {
+    margin-top: 0.9rem;
+    max-width: 50ch;
+  }
+
+  .network-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  @media (max-width: 40rem) {
+    .branch-toolbar__count {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

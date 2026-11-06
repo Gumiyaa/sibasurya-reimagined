@@ -1,0 +1,72 @@
+---
+interface HeadingLine {
+  text: string;
+  accent?: boolean;
+}
+
+interface Props {
+  lines: Array<string | HeadingLine>;
+  as?: 'h1' | 'h2' | 'h3';
+  size?: 'xl' | 'h1' | 'h2' | 'h3';
+  lead?: string;
+  id?: string;
+  class?: string;
+  align?: 'left' | 'center';
+}
+
+const {
+  lines,
+  as: Tag = 'h2',
+  size = 'h2',
+  lead,
+  id,
+  class: className,
+  align = 'left',
+} = Astro.props;
+
+const normalized = lines.map((line) =>
+  typeof line === 'string' ? { text: line, accent: false } : line,
+);
+---
+
+<div class:list={['section-heading', `section-heading--${align}`, className]}>
+  <Tag id={id} class:list={['display', `display--${size}`, 'section-heading__title']}>
+    {normalized.map((line) => (
+      <span class:list={['section-heading__line', { accent: line.accent }]}>{line.text}</span>
+    ))}
+  </Tag>
+  {lead && <p class="section-heading__lead lead">{lead}</p>}
+</div>
+
+<style>
+  .section-heading {
+    max-width: 62rem;
+  }
+
+  .section-heading--center {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .section-heading--center .section-heading__lead {
+    margin-inline: auto;
+  }
+
+  .section-heading__title {
+    display: flex;
+    flex-direction: column;
+    text-wrap: balance;
+  }
+
+  .section-heading__line.accent {
+    color: var(--accent-ink);
+  }
+
+  .section-heading__lead {
+    margin-top: clamp(1.1rem, 2vw, 1.75rem);
+  }
+
+  .section-heading--center .section-heading__title {
+    align-items: center;
+  }
+</style>

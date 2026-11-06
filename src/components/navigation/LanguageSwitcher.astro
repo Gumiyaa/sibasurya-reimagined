@@ -1,0 +1,65 @@
+---
+interface Props {
+  current?: 'id' | 'en';
+  idHref?: string;
+  compact?: boolean;
+}
+
+const { current = 'id', idHref = '/', compact = false } = Astro.props;
+---
+
+<div class:list={['lang', { 'lang--compact': compact }]} role="group" aria-label="Pilihan bahasa">
+  <a
+    class:list={['lang__item', { 'is-active': current === 'id' }]}
+    href={idHref}
+    hreflang="id"
+    lang="id"
+    aria-current={current === 'id' ? 'page' : undefined}
+  >
+    ID
+  </a>
+  <span class="lang__divider" aria-hidden="true"></span>
+  <a
+    class:list={['lang__item', { 'is-active': current === 'en' }]}
+    href="/en/"
+    hreflang="en"
+    lang="en"
+    aria-current={current === 'en' ? 'page' : undefined}
+  >
+    EN
+  </a>
+</div>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .lang__item {
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--dim);
+    transition: color var(--dur);
+  }
+
+  .lang__item:hover {
+    color: var(--paper);
+  }
+
+  .lang__item.is-active {
+    color: var(--paper);
+  }
+
+  .lang__divider {
+    width: 1px;
+    height: 0.65rem;
+    background: var(--line-strong);
+  }
+
+  .lang--compact .lang__item {
+    font-size: 0.6rem;
+  }
+</style>

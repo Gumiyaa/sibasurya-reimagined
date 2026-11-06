@@ -1,0 +1,180 @@
+---
+import { Image } from 'astro:assets';
+import type { FleetCategory } from '@/types';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  category: FleetCategory;
+  index: string;
+}
+
+const { category, index } = Astro.props;
+---
+
+<article class="fleet-card" data-reveal style={`--reveal-delay: ${(Number(index) - 1) * 60}ms`}>
+  <a class="fleet-card__link" href={`/fleet/${category.slug}/`} aria-label={`${category.name} — ${category.capacity}`}>
+    <div class="fleet-card__media">
+      <Image
+        src={category.image}
+        alt={category.alt}
+        widths={[360, 560, 760]}
+        sizes="(min-width: 64rem) 24vw, (min-width: 40rem) 48vw, 100vw"
+        format="webp"
+        quality={74}
+        loading="lazy"
+        decoding="async"
+        class="fleet-card__image"
+      />
+      <span class="fleet-card__code">{category.code}</span>
+      <span class="fleet-card__index num">{index}</span>
+    </div>
+
+    <div class="fleet-card__body">
+      <div class="fleet-card__top">
+        <span class="fleet-card__class">{category.shortName}</span>
+        <span class="fleet-card__capacity num">{category.capacity}</span>
+      </div>
+      <h3 class="fleet-card__name">{category.name}</h3>
+      <p class="fleet-card__axle">{category.axle}</p>
+      <span class="fleet-card__cta">
+        Lihat kategori
+        <Icon name="arrow-up-right" size={13} />
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .fleet-card {
+    min-width: 0;
+    height: 100%;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.35);
+    transition:
+      border-color var(--dur),
+      background var(--dur);
+  }
+
+  .fleet-card:hover {
+    border-color: var(--line-strong);
+    background: rgba(23, 28, 37, 0.7);
+  }
+
+  .fleet-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .fleet-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .fleet-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.35) contrast(1.03) brightness(0.82);
+    transition:
+      transform 700ms var(--ease-out),
+      filter 500ms var(--ease-out);
+  }
+
+  .fleet-card:hover .fleet-card__image {
+    transform: scale(1.035);
+    filter: grayscale(0.2) contrast(1.04) brightness(0.9);
+  }
+
+  .fleet-card__code {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.28rem 0.4rem;
+    background: rgba(11, 14, 19, 0.72);
+    border: 1px solid rgba(242, 242, 242, 0.16);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: var(--paper-soft);
+  }
+
+  .fleet-card__index {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.6rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(242, 242, 242, 0.32);
+  }
+
+  .fleet-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .fleet-card__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .fleet-card__class {
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .fleet-card__capacity {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
+  .fleet-card__name {
+    margin-top: 0.7rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 1.7vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .fleet-card__axle {
+    margin-top: 0.35rem;
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    color: var(--dim);
+  }
+
+  .fleet-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .fleet-card:hover .fleet-card__cta {
+    color: var(--accent-ink);
+  }
+</style>

@@ -1,0 +1,316 @@
+---
+import { Image } from 'astro:assets';
+import { company } from '@/data/company';
+import { images } from '@/data/images';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<section class="legacy section" aria-labelledby="legacy-title">
+  <div class="shell">
+    <div class="legacy__head">
+      <SectionLabel index="03" text="Sejarah perusahaan" />
+      <span class="micro">Semarang · 1951 — sekarang</span>
+    </div>
+
+    <div class="legacy__grid">
+      <div class="legacy__text">
+        <div class="legacy__year-wrap">
+          <span class="legacy__year num">1951</span>
+          <span class="legacy__year-label">Tahun<br />berdiri</span>
+        </div>
+
+        <h2 class="display display--h2 legacy__title" id="legacy-title">
+          Tujuh dekade menggerakkan <span class="accent">logistik industri</span> nasional.
+        </h2>
+
+        <div class="legacy__copy copy">
+          <p>
+            Berdiri di Semarang pada 1951, PT Siba Surya tumbuh bersama kebutuhan
+            pengiriman material industri Indonesia. Fokus kami tetap: memindahkan
+            muatan berat dengan aman, utuh, dan tepat waktu.
+          </p>
+          <p>
+            Hari ini jaringan operasional menghubungkan pelabuhan, sentra manufaktur,
+            dan hub distribusi di Jawa dan Sumatra. Setiap perjalanan ditopang
+            pemeliharaan armada, telemetri, dan tata kelola pengemudi yang ketat.
+          </p>
+        </div>
+
+        <div class="legacy__quote">
+          <Icon name="message" size={18} />
+          <blockquote>
+            <p>{company.quote.text}</p>
+            <footer>{company.quote.attribution}</footer>
+          </blockquote>
+        </div>
+
+        <a class="link-arrow legacy__link" href="/about/">
+          Baca rekam jejak perusahaan
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+
+      <div class="legacy__visual">
+        <figure class="legacy__figure">
+          <div class="legacy__media">
+            <Image
+              src={images.legacyWorkshop}
+              alt="Area bengkel dan fasilitas armada industri dengan pencahayaan redup"
+              widths={[520, 760, 1080]}
+              sizes="(min-width: 64rem) 42vw, 100vw"
+              format="webp"
+              quality={78}
+              loading="lazy"
+              decoding="async"
+              class="legacy__image"
+            />
+            <span class="legacy__scrim" aria-hidden="true"></span>
+            <figcaption class="legacy__caption">
+              <span>Facility documentation</span>
+              <span>Central workshop · Semarang</span>
+            </figcaption>
+            <span class="legacy__figure-code">SBS · FAC — 07</span>
+          </div>
+        </figure>
+
+        <div class="legacy__panels">
+          <InformationPanel label="Kantor pusat" index="HQ" title="Semarang">
+            <p>{company.hq.lines[0]}</p>
+            <p>{company.hq.lines[1]}</p>
+          </InformationPanel>
+
+          <InformationPanel label="Jangkauan" index="NET" title="Jawa & Sumatra" tone="accent">
+            <p>10 depot dan hub operasional. Koridor Pantura, Trans-Jawa, dan Lintas Sumatra.</p>
+          </InformationPanel>
+        </div>
+
+        <div class="legacy__certs">
+          {company.certifications.map((cert) => (
+            <div class="legacy__cert">
+              <span class="legacy__cert-code">{cert.code}</span>
+              <span class="legacy__cert-label">{cert.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .legacy {
+    border-top: 0;
+  }
+
+  .legacy__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.4rem);
+  }
+
+  .legacy__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .legacy__grid {
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    }
+  }
+
+  .legacy__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .legacy__year-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .legacy__year {
+    font-size: clamp(5.2rem, 11vw, 10.5rem);
+    font-weight: 600;
+    line-height: 0.72;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+  }
+
+  .legacy__year-label {
+    padding-bottom: 0.6rem;
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .legacy__title {
+    margin-top: clamp(1.25rem, 2.4vw, 1.9rem);
+    max-width: 17ch;
+  }
+
+  .legacy__copy {
+    margin-top: 1.25rem;
+    max-width: 52ch;
+  }
+
+  .legacy__quote {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.9rem;
+    margin-top: 1.6rem;
+    padding: 1rem 1.1rem;
+    border-left: 2px solid var(--accent);
+    background: rgba(23, 28, 37, 0.55);
+  }
+
+  .legacy__quote svg {
+    color: var(--accent-ink);
+    margin-top: 0.15rem;
+  }
+
+  .legacy__quote blockquote p {
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: var(--paper-soft);
+    font-style: italic;
+  }
+
+  .legacy__quote footer {
+    margin-top: 0.5rem;
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .legacy__link {
+    align-self: flex-start;
+    margin-top: 1.5rem;
+  }
+
+  .legacy__visual {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .legacy__figure {
+    margin: 0;
+  }
+
+  .legacy__media {
+    position: relative;
+    aspect-ratio: 5 / 4.3;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .legacy__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.4) contrast(1.05) brightness(0.82);
+  }
+
+  .legacy__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(8, 10, 14, 0.82) 100%);
+  }
+
+  .legacy__caption {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(242, 242, 242, 0.22);
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--paper-soft);
+  }
+
+  .legacy__caption span:last-child {
+    color: rgba(242, 242, 242, 0.55);
+    text-align: right;
+  }
+
+  .legacy__figure-code {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    padding: 0.3rem 0.45rem;
+    border: 1px solid rgba(242, 242, 242, 0.2);
+    background: rgba(8, 10, 14, 0.55);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    color: var(--paper-soft);
+  }
+
+  .legacy__panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .legacy__certs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .legacy__cert {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .legacy__cert-code {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--paper);
+  }
+
+  .legacy__cert-label {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  @media (max-width: 36rem) {
+    .legacy__panels {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .legacy__year-label {
+      padding-bottom: 0.3rem;
+    }
+  }
+</style>

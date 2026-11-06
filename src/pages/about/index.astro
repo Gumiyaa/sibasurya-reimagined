@@ -1,0 +1,599 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { company } from '@/data/company';
+import { images } from '@/data/images';
+import { leadershipQuotes } from '@/data/values';
+import { branches } from '@/data/branches';
+
+const facts = [
+  { label: 'Badan usaha', value: 'PT Siba Surya' },
+  { label: 'Tahun berdiri', value: '1951' },
+  { label: 'Kantor pusat', value: 'Semarang, Jawa Tengah' },
+  { label: 'Bidang usaha', value: 'Angkutan darat muatan berat & logistik industrial' },
+  { label: 'Jangkauan', value: 'Jawa & Sumatra' },
+  { label: 'Depot & hub', value: '10 lokasi' },
+  { label: 'Sertifikasi', value: 'ISO 39001 · ISO 9001' },
+  { label: 'Status data', value: 'Menunggu verifikasi resmi' },
+];
+
+const principles = [
+  {
+    index: '01',
+    title: 'Disiplin pemeliharaan',
+    body: 'Armada dirawat di workshop sendiri dengan mekanik bersertifikat, kalibrasi rem, dan stok suku cadang orisinal. Pemeliharaan diperlakukan sebagai fungsi preventif, bukan reaktif.',
+  },
+  {
+    index: '02',
+    title: 'Pengawasan berlapis',
+    body: 'Command desk 24/7, pos pantau fisik di koridor, dan telemetri kendaraan bekerja bersama. Deviasi rute dan perilaku berkendara ditindaklanjuti, bukan sekadar dicatat.',
+  },
+  {
+    index: '03',
+    title: 'Dokumentasi yang dapat diaudit',
+    body: 'Manifest digital dan e-POD menghubungkan keberangkatan armada dengan konfirmasi serah terima di sistem pelanggan, mengurangi friksi administrasi dan entri ulang.',
+  },
+];
+
+const imageHero = images.legacyWorkshop;
+---
+
+<MainLayout
+  title="Tentang Kami — PT Siba Surya"
+  description="Profil PT Siba Surya: perusahaan angkutan darat muatan berat dan logistik industrial yang berdiri di Semarang sejak 1951, melayani koridor Jawa dan Sumatra."
+>
+  <PageHero
+    index="02"
+    label="Sejarah & profil perusahaan"
+    code="Corporate profile · est. 1951"
+    titleLines={['Tumbuh bersama', { text: 'industrialisasi Indonesia.', accent: true }]}
+    lead="Sejak 1951, PT Siba Surya memindahkan material industri yang menopang pembangunan: baja, semen, bahan konstruksi, dan kargo manufaktur berat. Fokus kami adalah keandalan yang dapat dipertanggungjawabkan."
+    image={imageHero}
+    imageAlt="Fasilitas bengkel dan armada industri dengan pencahayaan redup"
+    imageCaption="Dokumentasi fasilitas — fotografi stok sementara"
+    meta={[
+      { label: 'Berdiri', value: '1951 · Semarang' },
+      { label: 'Kantor pusat', value: 'Jl. Terboyo No. 7, Genuk' },
+      { label: 'Jangkauan', value: 'Jawa & Sumatra' },
+      { label: 'Depot', value: '10 hub operasional' },
+    ]}
+  />
+
+  <section class="about-intro section" aria-labelledby="profile-title">
+    <div class="shell about-intro__grid">
+      <div class="about-intro__main">
+        <SectionLabel index="01" text="Profil perusahaan" />
+        <SectionHeading
+          id="profile-title"
+          class="about-intro__heading"
+          lines={['Titik awal di Semarang,', { text: 'arah kerja lintas pulau.', accent: true }]}
+        />
+
+        <div class="copy about-intro__copy">
+          <p>
+            PT Siba Surya berdiri di Semarang pada 1951 sebagai perusahaan angkutan darat.
+            Selama lebih dari tujuh dekade, perusahaan berkembang mengikuti kebutuhan
+            pengiriman material industri nasional — dari kawasan pelabuhan hingga sentra
+            manufaktur dan proyek infrastruktur.
+          </p>
+          <p>
+            Kini jaringan operasional mencakup sepuluh depot dan hub di Jawa dan Sumatra.
+            Armada heavy haulage, medium carrier, light flatbed, dan wingbox dioperasikan
+            dengan standar pemeliharaan serta pengawasan yang sama.
+          </p>
+          <p>
+            Kami tidak memposisikan diri sebagai perantara. Dispatch, pemeliharaan,
+            pengawasan perjalanan, dan dokumentasi serah terima berada dalam satu
+            arsitektur operasional yang dapat ditelusuri.
+          </p>
+        </div>
+
+        <blockquote class="about-intro__quote">
+          <Icon name="message" size={20} />
+          <div>
+            <p>{company.quote.text}</p>
+            <footer>{company.quote.attribution}</footer>
+          </div>
+        </blockquote>
+
+        <div class="about-intro__actions">
+          <PrimaryButton href="/fleet/" icon="arrow-right">Lihat armada</PrimaryButton>
+          <SecondaryButton href="/contact/" icon="arrow-up-right">Hubungi dispatch</SecondaryButton>
+        </div>
+      </div>
+
+      <aside class="about-intro__aside" aria-label="Fakta perusahaan">
+        <InformationPanel label="Identitas perusahaan" index="CORP" title="PT Siba Surya">
+          <dl class="about-facts">
+            {facts.map((fact) => (
+              <div class="about-facts__row">
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </InformationPanel>
+
+        <InformationPanel label="Catatan data" index="VER" tone="accent">
+          <p>
+            Profil, alamat, dan angka operasional mengacu pada approved design reference
+            serta materi publik perusahaan. Arsip resmi dan milestone sejarah lengkap
+            masih menunggu verifikasi sebelum dipublikasikan sebagai fakta final.
+          </p>
+        </InformationPanel>
+      </aside>
+    </div>
+  </section>
+
+  <section class="about-work section section--ink-2" aria-labelledby="work-title">
+    <div class="shell">
+      <div class="about-work__head">
+        <SectionLabel index="02" text="Cara kami bekerja" />
+        <SectionHeading
+          id="work-title"
+          lines={['Tiga disiplin yang menjaga', { text: 'setiap perjalanan.', accent: true }]}
+        />
+      </div>
+
+      <div class="about-work__grid">
+        {principles.map((item) => (
+          <article class="about-work__item">
+            <span class="about-work__index num">{item.index}</span>
+            <h3 class="about-work__title">{item.title}</h3>
+            <p class="about-work__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="about-work__strip">
+        <span class="micro">Operational footprint</span>
+        <div class="about-work__footprint">
+          {branches.slice(0, 10).map((branch) => (
+            <span class:list={['about-work__city', { 'is-hq': branch.status === 'HQ' }]}>
+              {branch.city}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-timeline section" aria-labelledby="timeline-title">
+    <div class="shell">
+      <div class="about-timeline__head">
+        <SectionLabel index="03" text="Rekam jejak" />
+        <h2 class="display display--h2 about-timeline__heading" id="timeline-title">
+          Dua titik yang <span class="accent">terverifikasi.</span>
+        </h2>
+      </div>
+
+      <div class="about-timeline__grid">
+        <article class="about-timeline__item">
+          <span class="about-timeline__year num">1951</span>
+          <div>
+            <h3 class="about-timeline__label">Berdiri di Semarang</h3>
+            <p>Awal perjalanan PT Siba Surya sebagai perusahaan angkutan darat di Jawa Tengah.</p>
+          </div>
+        </article>
+
+        <article class="about-timeline__item">
+          <span class="about-timeline__year num">Kini</span>
+          <div>
+            <h3 class="about-timeline__label">Jaringan dua pulau</h3>
+            <p>Sepuluh depot dan hub operasional, armada heavy haulage, dan command desk 24/7.</p>
+          </div>
+        </article>
+      </div>
+
+      <p class="about-timeline__note">
+        <Icon name="file" size={13} />
+        <span>
+          Milestone sejarah, penghargaan, dan angka produksi akan ditambahkan setelah
+          verifikasi arsip perusahaan. Halaman ini tidak memuat peristiwa yang belum terverifikasi.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <section class="about-leaders section section--surface" aria-labelledby="leaders-title">
+    <div class="shell">
+      <div class="about-leaders__head">
+        <SectionLabel index="04" text="Kata direksi" />
+        <h2 class="display display--h2 about-leaders__heading" id="leaders-title">
+          Prinsip dari <span class="accent">ruang direksi.</span>
+        </h2>
+      </div>
+
+      <div class="about-leaders__grid">
+        {leadershipQuotes.map((quote) => (
+          <figure class="leader-quote">
+            <span class="leader-quote__index num">{quote.index}</span>
+            <blockquote>
+              <p>“{quote.quote}”</p>
+            </blockquote>
+            <figcaption>
+              <span class="leader-quote__name">{quote.name}</span>
+              <span class="leader-quote__role">{quote.role}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta section">
+    <div class="shell about-cta__inner">
+      <div>
+        <SectionLabel index="05" text="Langkah berikutnya" />
+        <h2 class="display display--h2 about-cta__title">Butuh mitra angkutan yang dapat diaudit?</h2>
+      </div>
+      <div class="about-cta__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Mulai konsultasi</PrimaryButton>
+        <SecondaryButton href="/services/" icon="arrow-up-right">Lihat layanan</SecondaryButton>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .about-intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .about-intro__grid {
+      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    }
+  }
+
+  .about-intro__heading {
+    margin-top: 1rem;
+  }
+
+  .about-intro__copy {
+    margin-top: 1.35rem;
+    max-width: 62ch;
+  }
+
+  .about-intro__quote {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.75rem;
+    padding: 1.15rem 1.25rem;
+    border-left: 2px solid var(--accent);
+    background: rgba(23, 28, 37, 0.6);
+  }
+
+  .about-intro__quote svg {
+    color: var(--accent-ink);
+    margin-top: 0.15rem;
+  }
+
+  .about-intro__quote p {
+    font-size: var(--fs-sm);
+    line-height: 1.75;
+    font-style: italic;
+    color: var(--paper-soft);
+  }
+
+  .about-intro__quote footer {
+    margin-top: 0.55rem;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .about-intro__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.6rem;
+  }
+
+  .about-intro__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .about-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .about-facts__row {
+    display: grid;
+    grid-template-columns: minmax(6rem, 0.7fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-xs);
+  }
+
+  .about-facts__row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .about-facts__row dt {
+    color: var(--dim);
+    letter-spacing: 0.02em;
+  }
+
+  .about-facts__row dd {
+    margin: 0;
+    text-align: right;
+    color: var(--paper-soft);
+    line-height: 1.45;
+  }
+
+  /* Work principles ----------------------------------------------------- */
+  .about-work__head {
+    max-width: 54rem;
+    padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .about-work__head :global(.section-heading) {
+    margin-top: 1rem;
+  }
+
+  .about-work__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 56rem) {
+    .about-work__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .about-work__item {
+    padding: 1.25rem 1.25rem 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 56rem) {
+    .about-work__item {
+      border-bottom: 0;
+      border-right: 1px solid var(--line);
+    }
+
+    .about-work__item + .about-work__item {
+      padding-left: 1.25rem;
+    }
+  }
+
+  .about-work__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .about-work__title {
+    margin-top: 0.65rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .about-work__body {
+    margin-top: 0.75rem;
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .about-work__strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-work__footprint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .about-work__city {
+    padding: 0.25rem 0.45rem;
+    border: 1px solid var(--line);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .about-work__city.is-hq {
+    border-color: var(--accent-line);
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+  }
+
+  /* Timeline ------------------------------------------------------------ */
+  .about-timeline__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .about-timeline__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 56rem) {
+    .about-timeline__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .about-timeline__item {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.4fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    padding: 1.25rem 1rem 1.35rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 56rem) {
+    .about-timeline__item {
+      border-bottom: 0;
+      border-right: 1px solid var(--line);
+      padding-right: 1.5rem;
+    }
+
+    .about-timeline__item + .about-timeline__item {
+      padding-left: 1.5rem;
+    }
+  }
+
+  .about-timeline__year {
+    font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+    font-weight: 600;
+    line-height: 0.85;
+    color: var(--paper);
+  }
+
+  .about-timeline__label {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 1.9vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .about-timeline__item p {
+    margin-top: 0.55rem;
+    font-size: var(--fs-xs);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .about-timeline__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: var(--dim);
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+
+  .about-timeline__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  /* Leaders ------------------------------------------------------------- */
+  .about-leaders__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .about-leaders__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 56rem) {
+    .about-leaders__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .leader-quote {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.28);
+  }
+
+  .leader-quote__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .leader-quote blockquote p {
+    font-size: var(--fs-sm);
+    line-height: 1.75;
+    color: var(--paper-soft);
+    font-style: italic;
+  }
+
+  .leader-quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .leader-quote__name {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  .leader-quote__role {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* CTA ----------------------------------------------------------------- */
+  .about-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .about-cta__title {
+    margin-top: 1rem;
+    max-width: 18ch;
+  }
+
+  .about-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

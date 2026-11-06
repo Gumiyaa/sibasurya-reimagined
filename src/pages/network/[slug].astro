@@ -1,0 +1,397 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import BranchCard from '@/components/sections/BranchCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { branches } from '@/data/branches';
+import { company } from '@/data/company';
+import { images } from '@/data/images';
+
+export function getStaticPaths() {
+  return branches.map((branch) => ({
+    params: { slug: branch.slug },
+    props: { branch },
+  }));
+}
+
+const { branch } = Astro.props;
+const related = branches.filter((item) => item.island === branch.island && item.slug !== branch.slug).slice(0, 3);
+const heroImage = branch.island === 'Sumatra' ? images.trucksFog : images.fleetRow;
+const isHq = branch.status === 'HQ';
+---
+
+<MainLayout
+  title={`Depot ${branch.city} — Jaringan PT Siba Surya`}
+  description={`Depot ${branch.city}, ${branch.region}: ${branch.role}. Bagian dari jaringan operasional PT Siba Surya di ${branch.island}.`}
+>
+  <PageHero
+    index={branch.index}
+    label="Network depot"
+    code={`NET-${branch.index} · ${branch.status}`}
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Jaringan', href: '/network/' },
+      { label: branch.city },
+    ]}
+    titleLines={[branch.city, { text: isHq ? 'Kantor pusat' : 'Depot operasional', accent: true }]}
+    lead={branch.coverage}
+    image={heroImage}
+    imageAlt={branch.island === 'Sumatra' ? 'Truk melintas di jalan berkabut' : 'Barisan truk trailer di area depo logistik'}
+    imageCaption="Dokumentasi jaringan — fotografi stok sementara"
+    meta={[
+      { label: 'Wilayah', value: branch.region },
+      { label: 'Pulau', value: branch.island },
+      { label: 'Koridor', value: branch.corridor },
+      { label: 'Status', value: isHq ? 'HQ · Dispatch' : 'Depot' },
+    ]}
+  >
+    <Fragment slot="actions">
+      <PrimaryButton href="/contact/" icon="arrow-right">Hubungi dispatch</PrimaryButton>
+      <SecondaryButton href="/network/" icon="arrow-up-right">Semua depot</SecondaryButton>
+    </Fragment>
+  </PageHero>
+
+  <section class="branch-detail section" aria-labelledby="branch-role-title">
+    <div class="shell branch-detail__layout">
+      <div class="branch-detail__main">
+        <SectionLabel index="01" text="Peran dalam jaringan" />
+        <SectionHeading
+          id="branch-role-title"
+          class="branch-detail__heading"
+          lines={['Fungsi', { text: 'operasional depot.', accent: true }]}
+          size="h2"
+        />
+
+        <p class="copy branch-detail__lead">{branch.role}.</p>
+        <p class="copy branch-detail__body">{branch.coverage}</p>
+
+        <div class="branch-detail__block">
+          <h3 class="branch-detail__subtitle">Komoditas yang dilayani</h3>
+          <ul class="branch-detail__tags">
+            {branch.commodities.map((commodity) => (
+              <li>{commodity}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="branch-detail__block">
+          <h3 class="branch-detail__subtitle">Koridor terkait</h3>
+          <p class="branch-detail__corridor">{branch.corridor}</p>
+          <a class="link-arrow branch-detail__link" href="/network/">
+            Lihat koridor utama
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </div>
+
+        <div class="branch-detail__block" id="kontak">
+          <h3 class="branch-detail__subtitle">Alamat &amp; kontak</h3>
+          {isHq ? (
+            <address class="branch-detail__address">
+              <span class="micro">{company.hq.label}</span>
+              {company.hq.lines.map((line) => <span>{line}</span>)}
+              <a href={`tel:${company.contact.phone}`}>{company.contact.phoneLabel}</a>
+              <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+            </address>
+          ) : (
+            <InformationPanel label="Menunggu verifikasi" index="TBA" tone="accent">
+              <p>
+                Alamat, nomor telepon, dan jam operasional depot {branch.city} belum
+                diverifikasi. Data tidak ditampilkan agar tidak menyesatkan. Untuk
+                koordinasi pengiriman, hubungi kantor pusat dispatch di Semarang.
+              </p>
+            </InformationPanel>
+          )}
+        </div>
+
+        <div class="branch-detail__note">
+          <Icon name="file" size={14} />
+          <p>
+            Profil depot mengacu pada approved design reference. Data kontak cabang
+            akan dilengkapi setelah verifikasi resmi perusahaan.
+          </p>
+        </div>
+      </div>
+
+      <aside class="branch-detail__aside" aria-label="Ringkasan depot">
+        <InformationPanel label="Ringkasan depot" index={`NET-${branch.index}`} title={branch.city}>
+          <dl class="branch-facts">
+            <div>
+              <dt>Wilayah</dt>
+              <dd>{branch.region}</dd>
+            </div>
+            <div>
+              <dt>Pulau</dt>
+              <dd>{branch.island}</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{isHq ? 'Kantor pusat dispatch' : 'Depot operasional'}</dd>
+            </div>
+            <div>
+              <dt>Koridor</dt>
+              <dd>{branch.corridor}</dd>
+            </div>
+          </dl>
+        </InformationPanel>
+
+        <InformationPanel label="Koordinasi pengiriman" index="OPS" tone="accent">
+          <p>
+            Permintaan angkutan dan penjadwalan ritase dikoordinasikan melalui command
+            desk pusat. Sertakan asal, tujuan, tonase, dan jadwal.
+          </p>
+          <div class="branch-detail__panel-actions">
+            <a class="link-arrow" href={`tel:${company.contact.phone}`}>
+              {company.contact.phoneLabel}
+              <Icon name="phone" size={14} />
+            </a>
+            <a class="link-arrow" href={`mailto:${company.contact.email}`}>
+              Email dispatch
+              <Icon name="mail" size={14} />
+            </a>
+          </div>
+        </InformationPanel>
+      </aside>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="branch-related section section--ink-2" aria-labelledby="branch-related-title">
+      <div class="shell">
+        <div class="branch-related__head">
+          <div>
+            <SectionLabel index="02" text={`Depot lain di ${branch.island}`} />
+            <h2 class="display display--h2 branch-related__title" id="branch-related-title">
+              Jaringan <span class="accent">terhubung.</span>
+            </h2>
+          </div>
+          <a class="link-arrow" href="/network/">
+            Semua depot
+            <Icon name="arrow-right" size={15} />
+          </a>
+        </div>
+
+        <div class="branch-related__grid">
+          {related.map((item) => <BranchCard branch={item} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</MainLayout>
+
+<style>
+  .branch-detail__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .branch-detail__layout {
+      grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+    }
+  }
+
+  .branch-detail__main {
+    min-width: 0;
+  }
+
+  .branch-detail__heading {
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .branch-detail__lead {
+    font-size: var(--fs-body-lg);
+    color: var(--paper-soft);
+  }
+
+  .branch-detail__body {
+    margin-top: 0.9rem;
+    max-width: 62ch;
+  }
+
+  .branch-detail__block {
+    margin-top: 1.9rem;
+  }
+
+  .branch-detail__subtitle {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .branch-detail__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.85rem;
+  }
+
+  .branch-detail__tags li {
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--line);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .branch-detail__corridor {
+    margin-top: 0.8rem;
+    font-size: var(--fs-sm);
+    color: var(--paper-soft);
+  }
+
+  .branch-detail__link {
+    margin-top: 0.9rem;
+  }
+
+  .branch-detail__address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.85rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    background: rgba(11, 14, 19, 0.35);
+    font-style: normal;
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .branch-detail__address .micro {
+    margin-bottom: 0.2rem;
+    color: var(--dim);
+  }
+
+  .branch-detail__address a {
+    margin-top: 0.3rem;
+    color: var(--paper-soft);
+    transition: color var(--dur);
+  }
+
+  .branch-detail__address a:hover {
+    color: var(--accent-ink);
+  }
+
+  .branch-detail__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+  }
+
+  .branch-detail__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .branch-detail__note p {
+    max-width: 72ch;
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+
+  .branch-detail__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: calc(var(--header-h) + 1.25rem);
+  }
+
+  .branch-facts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .branch-facts > div {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .branch-facts > div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .branch-facts dt {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .branch-facts dd {
+    margin: 0;
+    font-size: var(--fs-xs);
+    line-height: 1.45;
+    text-align: right;
+    color: var(--paper-soft);
+  }
+
+  .branch-detail__panel-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 0.9rem;
+  }
+
+  .branch-related__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .branch-related__title {
+    margin-top: 1rem;
+  }
+
+  .branch-related__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .branch-related__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .branch-related__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .branch-detail__aside {
+      position: static;
+    }
+  }
+</style>

@@ -1,0 +1,458 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { vacancies } from '@/data/careers';
+import { company } from '@/data/company';
+import { images } from '@/data/images';
+
+const departments = Array.from(new Set(vacancies.map((vacancy) => vacancy.department)));
+
+const applyHref = (title: string) =>
+  `mailto:${company.contact.email}?subject=${encodeURIComponent(`Lamaran — ${title}`)}`;
+---
+
+<MainLayout
+  title="Karir — PT Siba Surya"
+  description="Peluang kerja di PT Siba Surya untuk bidang operasional armada, workshop, HSE, komersial, dan teknologi. Konten lowongan masih dalam tahap draf."
+  noindex
+>
+  <PageHero
+    index="N2"
+    label="Careers · people & operations"
+    code="Career index · draft review"
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Karir' },
+    ]}
+    titleLines={['Menjaga armada,', { text: 'menggerakkan industri.', accent: true }]}
+    lead="Pekerjaan di Siba Surya berpusat pada disiplin operasional: keselamatan, pemeliharaan, ketepatan waktu, dan integritas dalam setiap perjalanan."
+    image={images.mechanic}
+    imageAlt="Mekanik memeriksa komponen mesin kendaraan berat"
+    imageCaption="Aktivitas workshop — fotografi stok sementara"
+    meta={[
+      { label: 'Status', value: 'Draf rekrutmen' },
+      { label: 'Divisi', value: `${departments.length} bidang` },
+      { label: 'Posisi', value: `${vacancies.length} draf` },
+      { label: 'Penempatan', value: 'Semarang · koridor' },
+    ]}
+  />
+
+  <section class="careers-index section" aria-labelledby="careers-index-title">
+    <div class="shell">
+      <div class="draft-banner" role="note">
+        <span class="draft-banner__label">
+          <Icon name="file" size={13} />
+          Draf rekrutmen
+        </span>
+        <p>
+          Judul posisi di bawah mengacu pada daftar karir publik yang tercatat pada
+          audit UX. Deskripsi, kualifikasi, dan status lowongan adalah draf yang
+          menunggu verifikasi HR. Halaman ini tidak diindeks mesin pencari dan belum
+          merupakan pembukaan lowongan resmi.
+        </p>
+      </div>
+
+      <div class="careers-index__head">
+        <div>
+          <SectionLabel index="01" text="Posisi tersedia" />
+          <SectionHeading
+            id="careers-index-title"
+            class="careers-index__heading"
+            lines={['Bidang kerja', { text: 'di lapangan dan kantor.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy careers-index__lead">
+          Setiap lowongan memiliki halaman ringkasan tanggung jawab dan kualifikasi.
+          Gunakan kanal resmi yang tercantum untuk pertanyaan.
+        </p>
+      </div>
+
+      <div class="careers-grid">
+        {vacancies.map((vacancy) => (
+          <article class="vacancy-card" data-reveal>
+            <a class="vacancy-card__link" href={`/careers/${vacancy.slug}/`}>
+              <div class="vacancy-card__head">
+                <span class="vacancy-card__dept">{vacancy.department}</span>
+                <span class="vacancy-card__draft">Draft</span>
+              </div>
+
+              <h2 class="vacancy-card__title">{vacancy.title}</h2>
+              <p class="vacancy-card__summary">{vacancy.summary}</p>
+
+              <dl class="vacancy-card__meta">
+                <div>
+                  <dt>Lokasi</dt>
+                  <dd>{vacancy.location}</dd>
+                </div>
+                <div>
+                  <dt>Tipe</dt>
+                  <dd>{vacancy.type}</dd>
+                </div>
+                <div>
+                  <dt>Pengalaman</dt>
+                  <dd>{vacancy.experience}</dd>
+                </div>
+              </dl>
+
+              <span class="vacancy-card__cta">
+                Lihat detail
+                <Icon name="arrow-up-right" size={13} />
+              </span>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <div class="careers-index__process">
+        <div class="careers-index__process-head">
+          <span class="micro">Proses rekrutmen</span>
+          <span class="micro">Draf — menunggu verifikasi HR</span>
+        </div>
+        <ol class="careers-steps">
+          <li>
+            <span class="num">01</span>
+            <h3>Kirim lamaran</h3>
+            <p>Kirim CV dan ringkasan pengalaman melalui email resmi perusahaan.</p>
+          </li>
+          <li>
+            <span class="num">02</span>
+            <h3>Tinjauan awal</h3>
+            <p>Tim HR meninjau kesesuaian pengalaman dengan kebutuhan posisi.</p>
+          </li>
+          <li>
+            <span class="num">03</span>
+            <h3>Wawancara</h3>
+            <p>Wawancara teknis dan operasional bersama tim terkait.</p>
+          </li>
+          <li>
+            <span class="num">04</span>
+            <h3>Penawaran</h3>
+            <p>Pembahasan penempatan, lingkup kerja, dan ketentuan kerja.</p>
+          </li>
+        </ol>
+      </div>
+
+      <div class="careers-index__foot">
+        <InformationPanel label="Catatan penting" index="HR" tone="accent">
+          <p>
+            Konten lowongan masih draf. Jangan mengirim dokumen pribadi sensitif
+            sampai kanal dan proses resmi dikonfirmasi oleh HR. Siba Surya tidak
+            meminta pembayaran dalam proses rekrutmen.
+          </p>
+        </InformationPanel>
+
+        <div class="careers-index__actions">
+          <PrimaryButton href={applyHref('Lamaran umum')} icon="mail">Kirim lamaran umum</PrimaryButton>
+          <SecondaryButton href="/contact/" icon="arrow-up-right">Kontak perusahaan</SecondaryButton>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .draft-banner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--accent-line);
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+  }
+
+  @media (min-width: 48rem) {
+    .draft-banner {
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+  }
+
+  .draft-banner__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .draft-banner p {
+    max-width: 78ch;
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--paper-soft);
+  }
+
+  .careers-index__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  @media (min-width: 56rem) {
+    .careers-index__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .careers-index__heading {
+    margin-top: 1rem;
+  }
+
+  .careers-index__lead {
+    max-width: 38ch;
+  }
+
+  .careers-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .careers-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .careers-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .vacancy-card {
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.32);
+    transition:
+      border-color var(--dur),
+      background var(--dur);
+  }
+
+  .vacancy-card:hover {
+    border-color: var(--accent-line);
+    background: rgba(23, 28, 37, 0.6);
+  }
+
+  .vacancy-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.1rem 1.1rem 1.2rem;
+  }
+
+  .vacancy-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .vacancy-card__dept {
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .vacancy-card__draft {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--accent-line);
+    background: var(--accent-soft);
+    font-size: 0.54rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ff8b95;
+  }
+
+  .vacancy-card__title {
+    margin-top: 0.8rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.2vw, 2rem);
+    font-weight: 600;
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .vacancy-card__summary {
+    margin-top: 0.6rem;
+    font-size: var(--fs-xs);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .vacancy-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .vacancy-card__meta > div {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.6rem;
+  }
+
+  .vacancy-card__meta dt {
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .vacancy-card__meta dd {
+    margin: 0;
+    font-size: 0.68rem;
+    line-height: 1.45;
+    text-align: right;
+    color: var(--paper-soft);
+  }
+
+  .vacancy-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 1.1rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .vacancy-card:hover .vacancy-card__cta {
+    color: var(--accent-ink);
+  }
+
+  .careers-index__process {
+    margin-top: clamp(2.25rem, 4vw, 3.25rem);
+  }
+
+  .careers-index__process-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .careers-steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 56rem) {
+    .careers-steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .careers-steps li {
+    padding: 1.1rem 1rem 1.2rem 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .careers-steps li:nth-child(2n) {
+    padding-left: 1rem;
+  }
+
+  .careers-steps li:last-child {
+    border-right: 0;
+  }
+
+  @media (min-width: 56rem) {
+    .careers-steps li:nth-child(2n) {
+      padding-left: 0;
+    }
+
+    .careers-steps li + li {
+      padding-left: 1rem;
+    }
+  }
+
+  @media (max-width: 35.99rem) {
+    .careers-steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .careers-steps li,
+    .careers-steps li:nth-child(2n) {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      padding-left: 0;
+    }
+
+    .careers-steps li:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .careers-steps .num {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .careers-steps h3 {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.7vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .careers-steps p {
+    margin-top: 0.5rem;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    color: var(--dim);
+  }
+
+  .careers-index__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .careers-index__foot :global(.info-panel) {
+    flex: 1 1 22rem;
+    max-width: 44rem;
+  }
+
+  .careers-index__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

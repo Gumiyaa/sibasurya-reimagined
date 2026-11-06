@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/sibasurya-logo.png';
+
+interface Props {
+  href?: string;
+  compact?: boolean;
+  large?: boolean;
+}
+
+const { href = '/', compact = false, large = false } = Astro.props;
+---
+
+<a class:list={['logo', { 'logo--compact': compact, 'logo--large': large }]} href={href}>
+  <Image
+    class="logo__image"
+    src={logo}
+    alt="PT Siba Surya"
+    width={256}
+    height={226}
+    loading={large ? 'lazy' : 'eager'}
+    decoding="async"
+  />
+  {!compact && (
+    <span class="logo__descriptor">
+      <span>Heavy haulage</span>
+      <span>Est. 1951</span>
+    </span>
+  )}
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex: none;
+    min-height: 2.5rem;
+    color: var(--paper);
+  }
+
+  .logo__image {
+    display: block;
+    width: auto;
+    height: 3.5rem;
+  }
+
+  .logo__descriptor {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    padding-left: 0.7rem;
+    border-left: 1px solid var(--line);
+    font-size: 0.48rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .logo--compact .logo__image {
+    height: 2.5rem;
+  }
+
+  .logo--large .logo__image {
+    height: 6.5rem;
+  }
+
+  .logo--large .logo__descriptor {
+    display: none;
+  }
+
+  @media (max-width: 48rem) {
+    .logo__image {
+      height: 3rem;
+    }
+
+    .logo__descriptor {
+      display: none;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .logo--large .logo__image {
+      height: 5.5rem;
+    }
+  }
+</style>

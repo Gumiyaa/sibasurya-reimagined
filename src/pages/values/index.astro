@@ -1,0 +1,445 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import IntegritySection from '@/components/sections/IntegritySection.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { values, leadershipQuotes } from '@/data/values';
+import { images } from '@/data/images';
+
+const practices = [
+  {
+    index: '01',
+    title: 'Rujukan keputusan',
+    body: 'Nilai AKTIF dipakai untuk menimbang keputusan operasional: memilih rute, menetapkan prioritas pemeliharaan, dan merespons permintaan pelanggan.',
+  },
+  {
+    index: '02',
+    title: 'Standar perilaku',
+    body: 'Integritas dan fokus pada pelanggan menjadi dasar interaksi dengan pengemudi, mitra, dan pelanggan industri — termasuk penolakan segala bentuk gratifikasi.',
+  },
+  {
+    index: '03',
+    title: 'Evaluasi berkelanjutan',
+    body: 'Adaptasi dan ketangguhan menuntut organisasi meninjau prosedur secara berkala ketika regulasi, medan, atau kebutuhan industri berubah.',
+  },
+];
+---
+
+<MainLayout
+  title="Nilai AKTIF & Tata Kelola — PT Siba Surya"
+  description="Nilai AKTIF PT Siba Surya — Adaptasi, Kerja Sama, Tangguh, Integritas, Fokus pada Pelanggan — serta komitmen tata kelola dan whistleblowing perusahaan."
+>
+  <PageHero
+    index="06"
+    label="AKTIF corporate values"
+    code="Culture & governance · 05 values"
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Nilai & Tata Kelola' },
+    ]}
+    titleLines={['Lima prinsip,', { text: 'satu standar kerja.', accent: true }]}
+    lead="AKTIF bukan akronim seremonial. Nilai ini menjadi rujukan keputusan operasional, standar perilaku, dan cara kami menjaga kepercayaan pelanggan industri."
+    image={images.truckDusk}
+    imageAlt="Truk trailer melintas di jalan pada senja hari"
+    imageCaption="Dokumentasi operasional — fotografi stok sementara"
+    meta={[
+      { label: 'Nilai inti', value: '05 prinsip AKTIF' },
+      { label: 'Tata kelola', value: 'GCG & whistleblowing' },
+      { label: 'Standar', value: 'ISO 39001 · ISO 9001' },
+      { label: 'Kanal laporan', value: '0813 9343 5205' },
+    ]}
+  />
+
+  <section class="values-detail section" aria-labelledby="values-detail-title">
+    <div class="shell">
+      <div class="values-detail__head">
+        <div>
+          <SectionLabel index="01" text="AKTIF" />
+          <SectionHeading
+            id="values-detail-title"
+            class="values-detail__heading"
+            lines={['Adaptasi, Kerja Sama,', { text: 'Tangguh, Integritas, Fokus.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy values-detail__lead">
+          Kelima nilai saling mengunci. Tidak ada yang berdiri sendiri: kecepatan
+          beradaptasi tanpa integritas akan merusak kepercayaan, dan ketangguhan tanpa
+          fokus pada pelanggan kehilangan arah.
+        </p>
+      </div>
+
+      <ol class="value-rows">
+        {values.map((value) => (
+          <li class="value-row" data-reveal>
+            <div class="value-row__letter-wrap" aria-hidden="true">
+              <span class="value-row__letter">{value.letter}</span>
+              <span class="value-row__index num">{value.index} / 05</span>
+            </div>
+            <div class="value-row__body">
+              <div class="value-row__title-row">
+                <h2 class="value-row__title">{value.title}</h2>
+                <span class="value-row__english">{value.english}</span>
+              </div>
+              <p class="value-row__desc">{value.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="values-detail__footer">
+        <span class="micro">AKTIF — Adaptasi · Kerja Sama · Tangguh · Integritas · Fokus pada Pelanggan</span>
+        <a class="link-arrow" href="#integritas">
+          Komitmen integritas
+          <Icon name="shield" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-practice section section--ink-2" aria-labelledby="practice-title">
+    <div class="shell">
+      <div class="values-practice__head">
+        <SectionLabel index="02" text="Penerapan nilai" />
+        <SectionHeading
+          id="practice-title"
+          lines={['Nilai yang', { text: 'bekerja setiap hari.', accent: true }]}
+          size="h2"
+        />
+      </div>
+
+      <div class="values-practice__grid">
+        {practices.map((practice) => (
+          <article class="practice-card">
+            <span class="practice-card__index num">{practice.index}</span>
+            <h3 class="practice-card__title">{practice.title}</h3>
+            <p class="practice-card__body">{practice.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="values-leaders section section--surface" aria-labelledby="values-leaders-title">
+    <div class="shell">
+      <div class="values-leaders__head">
+        <SectionLabel index="03" text="Suara kepemimpinan" />
+        <SectionHeading
+          id="values-leaders-title"
+          lines={['Arah dari', { text: 'ruang direksi.', accent: true }]}
+          size="h2"
+        />
+      </div>
+
+      <div class="values-leaders__grid">
+        {leadershipQuotes.map((quote) => (
+          <figure class="leader-quote">
+            <span class="leader-quote__index num">{quote.index}</span>
+            <blockquote>
+              <p>“{quote.quote}”</p>
+            </blockquote>
+            <figcaption>
+              <span class="leader-quote__name">{quote.name}</span>
+              <span class="leader-quote__role">{quote.role}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <IntegritySection />
+
+  <section class="values-cta section">
+    <div class="shell values-cta__inner">
+      <div>
+        <SectionLabel index="09" text="Bekerja bersama kami" />
+        <h2 class="display display--h2 values-cta__title">
+          Budaya yang <span class="accent">dapat dipertanggungjawabkan.</span>
+        </h2>
+      </div>
+      <div class="values-cta__actions">
+        <PrimaryButton href="/careers/" icon="arrow-right">Lihat peluang karir</PrimaryButton>
+        <SecondaryButton href="/contact/" icon="arrow-up-right">Hubungi perusahaan</SecondaryButton>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .values-detail__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  @media (min-width: 56rem) {
+    .values-detail__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .values-detail__heading {
+    margin-top: 1rem;
+  }
+
+  .values-detail__lead {
+    max-width: 40ch;
+  }
+
+  .value-rows {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .value-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: clamp(1.35rem, 2.6vw, 2rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 48rem) {
+    .value-row {
+      grid-template-columns: minmax(9rem, 0.28fr) minmax(0, 1fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
+      align-items: start;
+    }
+  }
+
+  .value-row__letter-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .value-row__letter-wrap {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  .value-row__letter {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 7vw, 6.5rem);
+    font-weight: 600;
+    line-height: 0.68;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    transition: color var(--dur);
+  }
+
+  .value-row:hover .value-row__letter {
+    color: var(--accent-ink);
+  }
+
+  .value-row__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  .value-row__body {
+    min-width: 0;
+  }
+
+  .value-row__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+
+  .value-row__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .value-row__english {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .value-row__desc {
+    margin-top: 0.85rem;
+    max-width: 70ch;
+    font-size: var(--fs-body);
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .values-detail__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.4rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Practices ----------------------------------------------------------- */
+  .values-practice__head {
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .values-practice__head :global(.section-heading) {
+    margin-top: 1rem;
+  }
+
+  .values-practice__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 56rem) {
+    .values-practice__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .practice-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.3);
+  }
+
+  .practice-card__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .practice-card__title {
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 1.9vw, 1.7rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .practice-card__body {
+    margin-top: 0.65rem;
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* Leaders ------------------------------------------------------------- */
+  .values-leaders__head {
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .values-leaders__head :global(.section-heading) {
+    margin-top: 1rem;
+  }
+
+  .values-leaders__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 56rem) {
+    .values-leaders__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .leader-quote {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.28);
+  }
+
+  .leader-quote__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .leader-quote blockquote p {
+    font-size: var(--fs-sm);
+    line-height: 1.75;
+    color: var(--paper-soft);
+    font-style: italic;
+  }
+
+  .leader-quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .leader-quote__name {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  .leader-quote__role {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* CTA ----------------------------------------------------------------- */
+  .values-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .values-cta__title {
+    margin-top: 1rem;
+    max-width: 20ch;
+  }
+
+  @media (max-width: 30rem) {
+    .values-cta__title {
+      font-size: 2rem;
+      line-height: 1;
+    }
+  }
+
+  .values-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

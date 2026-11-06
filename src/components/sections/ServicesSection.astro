@@ -1,0 +1,216 @@
+---
+import { services, operationalSteps } from '@/data/services';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import ServicePanel from '@/components/sections/ServicePanel.astro';
+---
+
+<section class="services section section--ink-2" aria-labelledby="services-title">
+  <div class="shell">
+    <div class="services__head">
+      <div>
+        <SectionLabel index="05" text="Integrated operational services" />
+        <SectionHeading
+          id="services-title"
+          class="services__heading"
+          lines={[
+            { text: 'Tiga lapis' },
+            { text: 'kendali operasional.', accent: true },
+          ]}
+          size="h2"
+        />
+      </div>
+
+      <div class="services__aside">
+        <p class="copy">
+          Angkutan muatan berat bukan hanya soal daya angkut. Ia adalah sistem
+          pengawasan, perawatan, dan dokumentasi yang bekerja bersamaan sepanjang
+          perjalanan.
+        </p>
+        <dl class="services__metrics">
+          <div>
+            <dt>Command desk</dt>
+            <dd>Semarang · 24/7</dd>
+          </div>
+          <div>
+            <dt>Pos pantau</dt>
+            <dd>50+ titik koridor</dd>
+          </div>
+          <div>
+            <dt>Dokumen</dt>
+            <dd>Manifest digital</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="services__panels">
+      {services.map((service, index) => (
+        <ServicePanel service={service} reverse={index === 1} />
+      ))}
+    </div>
+
+    <div class="services__steps">
+      <div class="services__steps-head">
+        <span class="micro">Alur operasional</span>
+        <span class="micro">Permintaan → e-POD</span>
+      </div>
+      <ol class="services__step-grid">
+        {operationalSteps.map((step) => (
+          <li class="services__step">
+            <span class="services__step-index num">{step.index}</span>
+            <h3 class="services__step-title">{step.title}</h3>
+            <p class="services__step-desc">{step.description}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .services__head {
+      grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.8fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .services__heading {
+    margin-top: 1rem;
+  }
+
+  .services__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .services__aside .copy {
+    max-width: 40ch;
+  }
+
+  .services__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .services__metrics > div {
+    padding: 0.7rem 0.65rem 0 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .services__metrics > div:last-child {
+    border-right: 0;
+  }
+
+  .services__metrics dt {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .services__metrics dd {
+    margin: 0.28rem 0 0;
+    font-size: var(--fs-xs);
+    color: var(--paper-soft);
+  }
+
+  .services__panels {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .services__steps {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .services__steps-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .services__step-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  @media (min-width: 56rem) {
+    .services__step-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .services__step {
+    padding: 1.1rem 1rem 1.1rem 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .services__step:last-child {
+    border-right: 0;
+  }
+
+  .services__step:nth-child(2n) {
+    padding-left: 1rem;
+  }
+
+  @media (min-width: 56rem) {
+    .services__step:nth-child(2n) {
+      padding-left: 0;
+    }
+
+    .services__step + .services__step {
+      padding-left: 1rem;
+    }
+  }
+
+  .services__step-index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .services__step-title {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .services__step-desc {
+    margin-top: 0.55rem;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    color: var(--dim);
+  }
+
+  @media (max-width: 35.99rem) {
+    .services__step {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      padding-left: 0;
+    }
+
+    .services__step:nth-child(2n) {
+      padding-left: 0;
+    }
+  }
+</style>

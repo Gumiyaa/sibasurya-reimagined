@@ -1,0 +1,243 @@
+---
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { vacancies } from '@/data/careers';
+import { company } from '@/data/company';
+
+export function getStaticPaths() {
+  return vacancies.map((vacancy) => ({
+    params: { slug: vacancy.slug },
+    props: { vacancy },
+  }));
+}
+
+const { vacancy } = Astro.props;
+const mailHref = `mailto:${company.contact.email}?subject=${encodeURIComponent(`Lamaran — ${vacancy.title}`)}&body=${encodeURIComponent(
+  `Halo Tim HR PT Siba Surya,\n\nSaya ingin melamar posisi ${vacancy.title}.\n\nNama:\nDomisili:\nPengalaman:\n\nTerima kasih.`,
+)}`;
+const otherVacancies = vacancies.filter((item) => item.slug !== vacancy.slug).slice(0, 3);
+---
+
+<ArticleLayout
+  title={vacancy.title}
+  description={vacancy.summary}
+  eyebrow={`${vacancy.department} · careers`}
+  breadcrumb={[
+    { label: 'Beranda', href: '/' },
+    { label: 'Karir', href: '/careers/' },
+    { label: vacancy.title },
+  ]}
+  lead={vacancy.summary}
+  statusLabel="Draf rekrutmen — belum dibuka resmi"
+  meta={[
+    { label: 'Divisi', value: vacancy.department },
+    { label: 'Lokasi', value: vacancy.location },
+    { label: 'Tipe', value: vacancy.type },
+    { label: 'Pengalaman', value: vacancy.experience },
+  ]}
+  noindex
+>
+  <div class="draft-note" role="note">
+    <Icon name="file" size={14} />
+    <p>
+      Halaman ini adalah <strong>draf rekrutmen</strong>. Status lowongan, kualifikasi,
+      dan detail penempatan belum diverifikasi HR. Jangan mengirim dokumen pribadi
+      sensitif sampai pembukaan resmi dikonfirmasi.
+    </p>
+  </div>
+
+  <h2>Tentang posisi</h2>
+  <p>
+    Posisi {vacancy.title} berada di bawah {vacancy.department} dan ditempatkan di
+    {vacancy.location}. Ringkasan peran: {vacancy.summary.toLowerCase()}
+  </p>
+
+  <h2>Tanggung jawab</h2>
+  <ul>
+    {vacancy.responsibilities.map((item) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+
+  <h2>Kualifikasi</h2>
+  <ul>
+    {vacancy.requirements.map((item) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+
+  <h2>Cara melamar</h2>
+  <p>
+    Kirim CV dan ringkasan pengalaman melalui email resmi perusahaan dengan subjek
+    “Lamaran — {vacancy.title}”. Sertakan informasi domisili dan ketersediaan mulai
+    bekerja. Kanal ini akan diperbarui jika proses rekrutmen resmi dibuka.
+  </p>
+
+  <p class="draft-disclaimer">
+    Catatan: konten lowongan disusun dari daftar karir publik pada audit UX dan belum
+    diverifikasi HR. Tidak ada klaim mengenai kompensasi, fasilitas, atau tenggat
+    lamaran yang ditambahkan.
+  </p>
+
+  <Fragment slot="aside">
+    <InformationPanel label="Status lowongan" index="DRAFT" tone="accent">
+      <p>
+        Belum dibuka resmi. Halaman diberi <code>noindex</code> dan dikeluarkan dari
+        sitemap sampai status lowongan diverifikasi.
+      </p>
+    </InformationPanel>
+
+    <InformationPanel label="Lamar via email" index="HR" title="Kanal resmi">
+      <p>
+        Gunakan email dispatch perusahaan. Lampirkan CV dalam format PDF bila tersedia.
+      </p>
+      <a class="btn btn--primary aside-apply" href={mailHref}>
+        Kirim lamaran
+        <Icon name="mail" size={15} />
+      </a>
+      <p class="aside-contact">
+        <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+      </p>
+    </InformationPanel>
+
+    <InformationPanel label="Posisi lain" index="N2">
+      <ul class="aside-list">
+        {otherVacancies.map((item) => (
+          <li>
+            <a href={`/careers/${item.slug}/`}>
+              <span>{item.title}</span>
+              <Icon name="arrow-up-right" size={12} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </InformationPanel>
+  </Fragment>
+
+  <Fragment slot="footer">
+    <div class="article-footer-cta">
+      <div>
+        <h2 class="display display--h3">Pertanyaan rekrutmen?</h2>
+        <p class="copy">Hubungi kanal resmi perusahaan untuk klarifikasi sebelum mengirim lamaran.</p>
+      </div>
+      <div class="article-footer-cta__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Kontak perusahaan</PrimaryButton>
+        <SecondaryButton href="/careers/" icon="arrow-up-right">Semua posisi</SecondaryButton>
+      </div>
+    </div>
+  </Fragment>
+</ArticleLayout>
+
+<style>
+  .draft-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--accent-line);
+    border-left: 2px solid var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .draft-note svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .draft-note p {
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--paper-soft);
+  }
+
+  .draft-note strong {
+    color: var(--paper);
+    font-weight: 600;
+  }
+
+  .draft-disclaimer {
+    margin-top: 1.5rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.66rem;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+
+  .aside-apply {
+    width: 100%;
+    margin-top: 0.9rem;
+  }
+
+  .aside-contact {
+    margin-top: 0.65rem;
+    font-size: var(--fs-xs);
+    color: var(--dim);
+  }
+
+  .aside-contact a {
+    color: var(--paper-soft);
+    word-break: break-word;
+  }
+
+  .aside-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .aside-list a {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .aside-list li:last-child a {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .aside-list a:hover {
+    color: var(--paper);
+  }
+
+  .aside-list svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .article-footer-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    padding: clamp(1.15rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+  }
+
+  .article-footer-cta .copy {
+    margin-top: 0.45rem;
+    max-width: 52ch;
+  }
+
+  .article-footer-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

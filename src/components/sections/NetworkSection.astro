@@ -1,0 +1,227 @@
+---
+import { branches } from '@/data/branches';
+import { corridors } from '@/data/corridors';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import TechnicalDataTable from '@/components/ui/TechnicalDataTable.astro';
+import BranchCard from '@/components/sections/BranchCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+const previewBranches = branches.slice(0, 6);
+
+const rows = corridors.map((corridor) => [
+  { text: corridor.index, mono: true },
+  corridor.route,
+  { text: corridor.distance, mono: true },
+  corridor.commodities,
+  { text: corridor.status, accent: true },
+]);
+---
+
+<section class="network section" aria-labelledby="network-title">
+  <div class="shell">
+    <div class="network__head">
+      <div>
+        <SectionLabel index="06" text="Strategic corridor network" />
+        <SectionHeading
+          id="network-title"
+          class="network__heading"
+          lines={[
+            { text: 'Koridor strategis,' },
+            { text: 'satu kendali.', accent: true },
+          ]}
+          size="h2"
+        />
+      </div>
+
+      <div class="network__aside">
+        <p class="copy">
+          Jaringan depot menghubungkan pelabuhan, sentra manufaktur, dan proyek
+          infrastruktur di dua pulau. Setiap koridor memiliki titik pantau dan
+          jalur komunikasi dispatch yang jelas.
+        </p>
+        <dl class="network__stats">
+          <div>
+            <dt>Depot hub</dt>
+            <dd class="num">10</dd>
+          </div>
+          <div>
+            <dt>Koridor utama</dt>
+            <dd class="num">04</dd>
+          </div>
+          <div>
+            <dt>Pulau</dt>
+            <dd class="num">02</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="network__table-block">
+      <div class="network__table-head">
+        <span class="micro">Corridor index · indicative distance</span>
+        <span class="micro">Status operasional</span>
+      </div>
+      <TechnicalDataTable
+        caption="Koridor operasional utama — jarak bersifat indikatif, bukan jadwal"
+        columns={['Kode', 'Koridor', 'Jarak', 'Komoditas', 'Status']}
+        rows={rows}
+        minWidth="52rem"
+      />
+    </div>
+
+    <div class="network__branches-head">
+      <span class="micro">Depot &amp; hub · 01—06</span>
+      <a class="link-arrow" href="/network/">
+        Semua jaringan
+        <Icon name="arrow-right" size={15} />
+      </a>
+    </div>
+
+    <div class="network__branches">
+      {previewBranches.map((branch) => <BranchCard branch={branch} />)}
+    </div>
+
+    <div class="network__disclaimer">
+      <Icon name="globe" size={14} />
+      <p>
+        Peta, jarak, dan daftar cabang mengacu pada approved design reference.
+        Alamat serta kontak cabang selain kantor pusat masih menunggu verifikasi resmi.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .network {
+    border-top: 0;
+  }
+
+  .network__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.2vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .network__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.75fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .network__heading {
+    margin-top: 1rem;
+  }
+
+  .network__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .network__aside .copy {
+    max-width: 40ch;
+  }
+
+  .network__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .network__stats > div {
+    padding-top: 0.65rem;
+    border-right: 1px solid var(--line);
+  }
+
+  .network__stats > div:last-child {
+    border-right: 0;
+    padding-left: 0.65rem;
+  }
+
+  .network__stats > div:nth-child(2) {
+    padding-left: 0.65rem;
+  }
+
+  .network__stats dt {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .network__stats dd {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 2.5vw, 2.3rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--paper);
+  }
+
+  .network__table-block {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .network__table-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .network__branches-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .network__branches {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .network__branches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .network__branches {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .network__disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+  }
+
+  .network__disclaimer svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .network__disclaimer p {
+    max-width: 78ch;
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+</style>

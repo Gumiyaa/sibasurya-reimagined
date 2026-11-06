@@ -1,0 +1,328 @@
+---
+import { company } from '@/data/company';
+import { footerNavigation } from '@/data/navigation';
+import { branches } from '@/data/branches';
+import Logo from '@/components/ui/Logo.astro';
+import Icon from '@/components/ui/Icon.astro';
+import LanguageSwitcher from '@/components/navigation/LanguageSwitcher.astro';
+
+const year = new Date().getFullYear();
+const networkLinks = branches.slice(0, 4);
+---
+
+<footer class="site-footer" aria-labelledby="footer-heading">
+  <h2 id="footer-heading" class="sr-only">Informasi perusahaan dan navigasi footer</h2>
+
+  <div class="shell site-footer__top">
+    <div class="site-footer__identity">
+      <Logo large />
+      <p class="site-footer__desc">{company.shortDescription}</p>
+
+      <address class="site-footer__address">
+        <span class="micro">{company.hq.label}</span>
+        {company.hq.lines.map((line) => <span>{line}</span>)}
+      </address>
+
+      <div class="site-footer__contact">
+        <a href={`tel:${company.contact.phone}`}>
+          <Icon name="phone" size={14} />
+          {company.contact.phoneLabel}
+        </a>
+        <a href={`mailto:${company.contact.email}`}>
+          <Icon name="mail" size={14} />
+          {company.contact.email}
+        </a>
+      </div>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Navigasi perusahaan">
+      <div class="site-footer__col">
+        <h3 class="site-footer__title">Perusahaan</h3>
+        <ul>
+          {footerNavigation.perusahaan.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+          <li><a href="/contact/">Kontak &amp; penawaran</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h3 class="site-footer__title">Layanan &amp; armada</h3>
+        <ul>
+          {footerNavigation.layanan.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h3 class="site-footer__title">Jaringan</h3>
+        <ul>
+          {networkLinks.map((branch) => (
+            <li><a href={`/network/${branch.slug}/`}>{branch.city}</a></li>
+          ))}
+          <li><a class="site-footer__more" href="/network/">Semua 10 depot <Icon name="arrow-right" size={12} /></a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h3 class="site-footer__title">Integritas</h3>
+        <ul>
+          <li><a href="/values/#integritas">Tata kelola &amp; GCG</a></li>
+          <li>
+            <a href={`https://wa.me/${company.whistleblowing.phone.replace('+', '')}`} target="_blank" rel="noopener noreferrer">
+              Whistleblowing
+            </a>
+          </li>
+          <li><a href={`tel:${company.whistleblowing.phone}`}>{company.whistleblowing.phoneLabel}</a></li>
+        </ul>
+        <p class="site-footer__note">{company.whistleblowing.note}</p>
+      </div>
+    </nav>
+  </div>
+
+  <div class="shell site-footer__wordmark-wrap" aria-hidden="true">
+    <p class="site-footer__wordmark display">
+      <span>SIBA</span><span class="site-footer__wordmark-accent">SURYA</span>
+    </p>
+    <div class="site-footer__wordmark-meta">
+      <span>Est. 1951</span>
+      <span>Semarang · Indonesia</span>
+      <span>Heavy haulage freight</span>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="shell site-footer__bottom-inner">
+      <p class="site-footer__copyright">
+        © {year} PT Siba Surya. Seluruh hak dilindungi.
+      </p>
+      <div class="site-footer__bottom-links">
+        <a href="/news/">Berita</a>
+        <a href="/careers/">Karir</a>
+        <a href="/contact/#kantor">Kantor pusat</a>
+        <LanguageSwitcher current="id" idHref="/" compact />
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: #080a0e;
+  }
+
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(2.75rem, 5.5vw, 4.5rem);
+  }
+
+  @media (min-width: 60rem) {
+    .site-footer__top {
+      grid-template-columns: minmax(17rem, 0.9fr) minmax(0, 2fr);
+    }
+  }
+
+  .site-footer__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    max-width: 24rem;
+  }
+
+  .site-footer__desc {
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .site-footer__address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-style: normal;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .site-footer__address .micro {
+    margin-bottom: 0.25rem;
+    color: var(--dim);
+  }
+
+  .site-footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer__contact a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-xs);
+    color: var(--paper-soft);
+    transition: color var(--dur);
+  }
+
+  .site-footer__contact a:hover {
+    color: var(--accent-ink);
+  }
+
+  .site-footer__contact svg {
+    color: var(--accent-ink);
+    flex: none;
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  @media (min-width: 45rem) {
+    .site-footer__nav {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .site-footer__col {
+    min-width: 0;
+  }
+
+  .site-footer__title {
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-body);
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .site-footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .site-footer__col a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--fs-xs);
+    line-height: 1.45;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .site-footer__col a:hover {
+    color: var(--accent-ink);
+  }
+
+  .site-footer__more {
+    color: var(--paper-soft) !important;
+    font-weight: 500;
+  }
+
+  .site-footer__note {
+    margin-top: 0.9rem;
+    font-size: 0.66rem;
+    line-height: 1.6;
+    color: var(--dim);
+    max-width: 22ch;
+  }
+
+  /* Oversized wordmark band --------------------------------------------- */
+  .site-footer__wordmark-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 0.4rem;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+  }
+
+  .site-footer__wordmark {
+    margin-left: -0.05em;
+    font-size: clamp(4.4rem, 15.5vw, 15rem);
+    font-weight: 700;
+    line-height: 0.72;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+    white-space: nowrap;
+    transform: translateY(0.12em);
+  }
+
+  .site-footer__wordmark-accent {
+    margin-left: 0.1em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-strong);
+  }
+
+  .site-footer__wordmark-meta {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    padding-bottom: 1.1rem;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 64rem) {
+    .site-footer__wordmark-meta {
+      display: flex;
+    }
+  }
+
+  .site-footer__bottom {
+    border-top: 1px solid var(--line);
+    background: #06080b;
+  }
+
+  .site-footer__bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 1.5rem;
+    min-height: 3.4rem;
+    padding-block: 0.85rem;
+  }
+
+  .site-footer__copyright,
+  .site-footer__bottom-links {
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .site-footer__bottom-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .site-footer__bottom-links a {
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .site-footer__bottom-links a:hover {
+    color: var(--paper);
+  }
+</style>

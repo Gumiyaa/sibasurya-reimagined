@@ -1,0 +1,424 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import TechnicalDataTable from '@/components/ui/TechnicalDataTable.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import FleetCard from '@/components/fleet/FleetCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { fleetCategories } from '@/data/fleet';
+
+export function getStaticPaths() {
+  return fleetCategories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const related = fleetCategories.filter((item) => item.slug !== category.slug);
+
+const specRows = category.specs.map((spec) => [spec.label, { text: spec.value, mono: false }]);
+
+const fleetSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: category.name,
+  category: 'Heavy freight vehicle',
+  description: category.description,
+  brand: { '@type': 'Brand', name: 'PT Siba Surya' },
+  additionalProperty: category.specs.map((spec) => ({
+    '@type': 'PropertyValue',
+    name: spec.label,
+    value: spec.value,
+  })),
+};
+---
+
+<MainLayout
+  title={`${category.name} — Armada PT Siba Surya`}
+  description={`${category.name} PT Siba Surya: kapasitas ${category.capacity}, konfigurasi ${category.axle}. ${category.description}`}
+  jsonLd={fleetSchema}
+>
+  <PageHero
+    index="03"
+    label="Fleet capability catalog"
+    code={`${category.code} · ${category.capacity}`}
+    breadcrumb={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Armada', href: '/fleet/' },
+      { label: category.shortName },
+    ]}
+    titleLines={[{ text: category.name }, { text: category.capacity, accent: true }]}
+    lead={category.description}
+    image={category.image}
+    imageAlt={category.alt}
+    imageCaption="Dokumentasi armada — fotografi stok sementara"
+    meta={[
+      { label: 'Kode register', value: category.code },
+      { label: 'Daya muat', value: category.capacityKg },
+      { label: 'Konfigurasi', value: category.axle },
+      { label: 'Monitoring', value: 'GPS 24/7 · command desk' },
+    ]}
+  >
+    <Fragment slot="actions">
+      <PrimaryButton href="/contact/" icon="arrow-right">Minta penawaran unit</PrimaryButton>
+      <SecondaryButton href="/fleet/" icon="arrow-up-right">Kembali ke katalog</SecondaryButton>
+    </Fragment>
+  </PageHero>
+
+  <section class="fleet-detail section" aria-labelledby="fleet-spec-title">
+    <div class="shell fleet-detail__layout">
+      <div class="fleet-detail__main">
+        <SectionLabel index="01" text="Spesifikasi teknis" />
+        <SectionHeading
+          id="fleet-spec-title"
+          class="fleet-detail__heading"
+          lines={['Konfigurasi', { text: 'dan batas operasional.', accent: true }]}
+          size="h2"
+        />
+
+        <div class="fleet-detail__table">
+          <TechnicalDataTable
+            caption={`${category.code} — parameter unit`}
+            columns={['Parameter', 'Spesifikasi']}
+            rows={specRows}
+            minWidth="34rem"
+          />
+        </div>
+
+        <div class="fleet-detail__usecases">
+          <h3 class="fleet-detail__subtitle">Penggunaan yang sesuai</h3>
+          <ul class="fleet-detail__usecase-list">
+            {category.useCases.map((useCase, index) => (
+              <li>
+                <span class="fleet-detail__usecase-index num">{String(index + 1).padStart(2, '0')}</span>
+                <p>{useCase}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="fleet-detail__commodities">
+          <h3 class="fleet-detail__subtitle">Komoditas utama</h3>
+          <ul class="fleet-detail__tags">
+            {category.commodities.map((commodity) => (
+              <li>{commodity}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="fleet-detail__note">
+          <Icon name="file" size={14} />
+          <p>
+            Spesifikasi dan rentang kapasitas mengacu pada approved design reference.
+            Data ini bukan penawaran komersial dan wajib divalidasi terhadap register
+            armada resmi sebelum digunakan dalam kontrak.
+          </p>
+        </div>
+      </div>
+
+      <aside class="fleet-detail__aside" aria-label="Ringkasan unit">
+        <InformationPanel label="Ringkasan unit" index={category.code.slice(-2)} title={category.shortName}>
+          <dl class="fleet-facts">
+            <div>
+              <dt>Daya muat</dt>
+              <dd>{category.capacity}</dd>
+            </div>
+            <div>
+              <dt>Axle</dt>
+              <dd>{category.axle}</dd>
+            </div>
+            <div>
+              <dt>Platform</dt>
+              <dd>{category.specs[1]?.value ?? 'Menunggu verifikasi'}</dd>
+            </div>
+            <div>
+              <dt>Telemetri</dt>
+              <dd>GPS 24/7</dd>
+            </div>
+          </dl>
+        </InformationPanel>
+
+        <InformationPanel label="Ketersediaan" index="OPS" tone="accent">
+          <p>
+            Alokasi unit mengikuti jadwal dispatch dan koridor aktif. Sampaikan asal,
+            tujuan, tonase, serta dimensi kargo untuk pemeriksaan ketersediaan.
+          </p>
+          <a class="link-arrow fleet-detail__panel-link" href="/contact/">
+            Hubungi dispatch
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </InformationPanel>
+
+        <InformationPanel label="Keselamatan" index="HSE">
+          <p>
+            Unit beroperasi dengan pemeriksaan sebelum berangkat, pengamanan kargo,
+            dan pemantauan perjalanan. Standar acuan: ISO 39001 dan ISO 9001.
+          </p>
+        </InformationPanel>
+      </aside>
+    </div>
+  </section>
+
+  <section class="fleet-related section section--ink-2" aria-labelledby="related-title">
+    <div class="shell">
+      <div class="fleet-related__head">
+        <div>
+          <SectionLabel index="02" text="Kategori lain" />
+          <h2 class="display display--h2 fleet-related__title" id="related-title">
+            Bandingkan <span class="accent">konfigurasi.</span>
+          </h2>
+        </div>
+        <a class="link-arrow" href="/fleet/">
+          Semua armada
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+
+      <div class="fleet-related__grid">
+        {related.map((item, index) => (
+          <FleetCard category={item} index={String(index + 1).padStart(2, '0')} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="fleet-cta section">
+    <div class="shell fleet-cta__inner">
+      <div>
+        <SectionLabel index="03" text="Langkah berikutnya" />
+        <h2 class="display display--h2 fleet-cta__title">
+          Butuh konfigurasi <span class="accent">khusus?</span>
+        </h2>
+        <p class="copy fleet-cta__copy">
+          Tim dispatch dapat meninjau kebutuhan tonase, dimensi kargo, dan akses lokasi
+          sebelum mengusulkan unit.
+        </p>
+      </div>
+      <div class="fleet-cta__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Konsultasi kebutuhan</PrimaryButton>
+        <SecondaryButton href="/network/" icon="arrow-up-right">Lihat koridor</SecondaryButton>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .fleet-detail__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .fleet-detail__layout {
+      grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+    }
+  }
+
+  .fleet-detail__main {
+    min-width: 0;
+  }
+
+  .fleet-detail__heading {
+    margin-top: 1rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .fleet-detail__table {
+    margin-top: 0.5rem;
+  }
+
+  .fleet-detail__usecases {
+    margin-top: clamp(2rem, 3.5vw, 2.75rem);
+  }
+
+  .fleet-detail__subtitle {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .fleet-detail__usecase-list {
+    margin-top: 0.6rem;
+  }
+
+  .fleet-detail__usecase-list li {
+    display: grid;
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .fleet-detail__usecase-index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.12em;
+    color: var(--accent-ink);
+    padding-top: 0.15rem;
+  }
+
+  .fleet-detail__usecase-list p {
+    font-size: var(--fs-sm);
+    line-height: 1.65;
+    color: var(--paper-soft);
+  }
+
+  .fleet-detail__commodities {
+    margin-top: 1.75rem;
+  }
+
+  .fleet-detail__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.85rem;
+  }
+
+  .fleet-detail__tags li {
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--line);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .fleet-detail__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+  }
+
+  .fleet-detail__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .fleet-detail__note p {
+    max-width: 72ch;
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+
+  .fleet-detail__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: calc(var(--header-h) + 1.25rem);
+  }
+
+  .fleet-facts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fleet-facts > div {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .fleet-facts > div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .fleet-facts dt {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .fleet-facts dd {
+    margin: 0;
+    font-size: var(--fs-xs);
+    line-height: 1.45;
+    text-align: right;
+    color: var(--paper-soft);
+  }
+
+  .fleet-detail__panel-link {
+    margin-top: 0.9rem;
+  }
+
+  .fleet-related__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .fleet-related__title {
+    margin-top: 1rem;
+  }
+
+  .fleet-related__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .fleet-related__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .fleet-related__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .fleet-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .fleet-cta__title {
+    margin-top: 1rem;
+  }
+
+  .fleet-cta__copy {
+    margin-top: 0.9rem;
+    max-width: 50ch;
+  }
+
+  .fleet-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  @media (max-width: 63.99rem) {
+    .fleet-detail__aside {
+      position: static;
+    }
+  }
+</style>

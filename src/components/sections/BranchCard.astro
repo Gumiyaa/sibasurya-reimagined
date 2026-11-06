@@ -1,0 +1,172 @@
+---
+import type { Branch } from '@/types';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  branch: Branch;
+}
+
+const { branch } = Astro.props;
+---
+
+<article class="branch-card" data-reveal>
+  <a class="branch-card__link" href={`/network/${branch.slug}/`}>
+    <div class="branch-card__head">
+      <span class="branch-card__index num">{branch.index}</span>
+      <span class:list={['branch-card__status', { 'is-hq': branch.status === 'HQ' }]}>
+        {branch.status === 'HQ' ? 'HQ · Dispatch' : 'Depot'}
+      </span>
+    </div>
+
+    <div class="branch-card__title-row">
+      <h3 class="branch-card__city">{branch.city}</h3>
+      <Icon name="arrow-up-right" size={16} />
+    </div>
+
+    <p class="branch-card__region">{branch.region} · {branch.island}</p>
+    <p class="branch-card__role">{branch.role}</p>
+
+    <dl class="branch-card__meta">
+      <div>
+        <dt>Koridor</dt>
+        <dd>{branch.corridor}</dd>
+      </div>
+      <div>
+        <dt>Komoditas</dt>
+        <dd>{branch.commodities.slice(0, 2).join(' · ')}</dd>
+      </div>
+    </dl>
+  </a>
+</article>
+
+<style>
+  .branch-card {
+    height: 100%;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.3);
+    transition:
+      border-color var(--dur),
+      background var(--dur);
+  }
+
+  .branch-card:hover {
+    border-color: var(--accent-line);
+    background: rgba(23, 28, 37, 0.6);
+  }
+
+  .branch-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.1rem 1.1rem 1.2rem;
+  }
+
+  .branch-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .branch-card__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--dim);
+  }
+
+  .branch-card__status {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--line);
+    font-size: 0.54rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .branch-card__status.is-hq {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+
+  .branch-card__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+  }
+
+  .branch-card__city {
+    font-family: var(--font-display);
+    font-size: clamp(1.65rem, 2.3vw, 2.05rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .branch-card__title-row svg {
+    flex: none;
+    color: var(--dim);
+    transition:
+      color var(--dur),
+      transform var(--dur);
+  }
+
+  .branch-card:hover .branch-card__title-row svg {
+    color: var(--accent-ink);
+    transform: translate(2px, -2px);
+  }
+
+  .branch-card__region {
+    margin-top: 0.3rem;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .branch-card__role {
+    margin-top: 0.75rem;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .branch-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  .branch-card__meta > div {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.6rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .branch-card__meta dt {
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .branch-card__meta dd {
+    margin: 0;
+    font-size: 0.68rem;
+    line-height: 1.45;
+    color: var(--paper-soft);
+    text-align: right;
+  }
+</style>

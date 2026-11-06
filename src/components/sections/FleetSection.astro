@@ -1,0 +1,147 @@
+---
+import { fleetCategories } from '@/data/fleet';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import FleetFeature from '@/components/fleet/FleetFeature.astro';
+import FleetCard from '@/components/fleet/FleetCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+const flagship = fleetCategories.find((item) => item.flagship) ?? fleetCategories[0];
+const others = fleetCategories.filter((item) => item.slug !== flagship?.slug);
+---
+
+<section class="fleet-section section" aria-labelledby="fleet-title">
+  <div class="shell">
+    <div class="fleet-section__head">
+      <div>
+        <SectionLabel index="04" text="Fleet capability catalog" />
+        <SectionHeading
+          id="fleet-title"
+          class="fleet-section__heading"
+          lines={[
+            { text: 'Armada untuk' },
+            { text: 'setiap beban industri.', accent: true },
+          ]}
+          size="h2"
+        />
+      </div>
+
+      <div class="fleet-section__aside">
+        <p class="copy">
+          Empat kelas armada, satu standar pengawasan. Kapasitas dipilih berdasarkan
+          tonase, konfigurasi gandar, dan karakter muatan — bukan sekadar ketersediaan unit.
+        </p>
+        <a class="link-arrow" href="/fleet/">
+          Katalog lengkap
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+    </div>
+
+    {flagship && <FleetFeature category={flagship} index="04" />}
+
+    <div class="fleet-section__grid-head">
+      <span class="micro">Kategori lain · kapasitas terverifikasi</span>
+      <span class="micro">20 — 65 ton</span>
+    </div>
+
+    <div class="fleet-section__grid">
+      {others.map((category, index) => (
+        <FleetCard category={category} index={String(index + 1).padStart(2, '0')} />
+      ))}
+    </div>
+
+    <p class="fleet-section__note">
+      <Icon name="file" size={13} />
+      <span>
+        Spesifikasi teknis dan rentang kapasitas mengacu pada approved design reference.
+        Validasi terhadap register armada resmi diperlukan sebelum publikasi.
+      </span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .fleet-section {
+    border-top: 0;
+  }
+
+  .fleet-section__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  @media (min-width: 56rem) {
+    .fleet-section__head {
+      grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.7fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .fleet-section__heading {
+    margin-top: 1rem;
+  }
+
+  .fleet-section__aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .fleet-section__aside .copy {
+    max-width: 38ch;
+  }
+
+  .fleet-section__grid-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: clamp(2rem, 3.5vw, 3rem);
+    margin-bottom: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .fleet-section__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .fleet-section__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .fleet-section__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .fleet-section__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    max-width: 68ch;
+    margin-top: 1.5rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.66rem;
+    line-height: 1.6;
+    color: var(--dim);
+  }
+
+  .fleet-section__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+</style>

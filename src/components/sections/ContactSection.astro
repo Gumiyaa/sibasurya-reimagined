@@ -1,0 +1,253 @@
+---
+import { contact } from '@/data/contact';
+import { company } from '@/data/company';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<section class="contact-section section section--ink-2" id="kontak" aria-labelledby="contact-title">
+  <div class="contact-section__grid-bg" aria-hidden="true"></div>
+
+  <div class="shell contact-section__inner">
+    <div class="contact-section__intro">
+      <SectionLabel index="09" text="Supply chain inquiry" />
+
+      <h2 class="display contact-section__title" id="contact-title">
+        <span>Siap</span>
+        <span>mengamankan</span>
+        <span class="accent">rantai pasok</span>
+        <span>industri Anda.</span>
+      </h2>
+
+      <p class="lead contact-section__lead">
+        Sampaikan kebutuhan angkutan, tonase, dan tujuan pengiriman. Tim dispatch
+        akan memetakan kapasitas armada serta koridor yang paling sesuai.
+      </p>
+
+      <dl class="contact-section__channels">
+        {contact.channels.map((channel) => (
+          <div class="contact-section__channel">
+            <dt>{channel.label}</dt>
+            <dd>
+              <a
+                href={channel.href}
+                {...(channel.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {channel.value}
+              </a>
+              {channel.note && <span>{channel.note}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="contact-section__direct">
+        <Icon name="clock" size={15} />
+        <p>{contact.responseNote}</p>
+      </div>
+    </div>
+
+    <div class="contact-section__form-panel">
+      <div class="contact-section__form-head">
+        <div>
+          <p class="micro">DISPATCH · FORM 09</p>
+          <h3 class="contact-section__form-title" id="contact-form-title">Formulir permintaan</h3>
+        </div>
+        <span class="contact-section__form-status">Belum terhubung backend</span>
+      </div>
+
+      <ContactForm compact headingId="contact-form-title" />
+
+      <div class="contact-section__form-foot">
+        <span>{company.hq.full}</span>
+        <a href={`tel:${company.contact.phone}`}>{company.contact.phoneLabel}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    position: relative;
+    overflow: hidden;
+    border-top: 0;
+  }
+
+  .contact-section__grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(41, 46, 56, 0.26) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(41, 46, 56, 0.26) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 78%);
+    pointer-events: none;
+  }
+
+  .contact-section__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .contact-section__inner {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: clamp(2.5rem, 4vw, 4.5rem);
+    }
+  }
+
+  .contact-section__title {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    font-size: clamp(2.7rem, 5.4vw, 5.4rem);
+    font-weight: 600;
+    line-height: 0.84;
+    letter-spacing: -0.012em;
+    text-transform: uppercase;
+  }
+
+  .contact-section__lead {
+    margin-top: 1.35rem;
+    max-width: 43ch;
+  }
+
+  .contact-section__channels {
+    margin-top: 1.85rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .contact-section__channel {
+    display: grid;
+    grid-template-columns: minmax(6rem, 0.4fr) minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .contact-section__channel dt {
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding-top: 0.2rem;
+  }
+
+  .contact-section__channel dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .contact-section__channel a {
+    font-size: var(--fs-sm);
+    color: var(--paper-soft);
+    line-height: 1.5;
+    transition: color var(--dur);
+    word-break: break-word;
+  }
+
+  .contact-section__channel a:hover {
+    color: var(--accent-ink);
+  }
+
+  .contact-section__channel dd span {
+    font-size: 0.64rem;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  .contact-section__direct {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.1rem;
+    color: var(--dim);
+  }
+
+  .contact-section__direct svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .contact-section__direct p {
+    font-size: 0.66rem;
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+
+  /* Form panel ---------------------------------------------------------- */
+  .contact-section__form-panel {
+    position: relative;
+    padding: clamp(1.15rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--line-strong);
+    background: rgba(8, 10, 14, 0.66);
+    backdrop-filter: blur(4px);
+  }
+
+  .contact-section__form-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    padding-bottom: 0.95rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .contact-section__form-title {
+    margin-top: 0.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.3vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .contact-section__form-status {
+    padding: 0.3rem 0.45rem;
+    border: 1px solid var(--accent-line);
+    background: var(--accent-soft);
+    font-size: 0.54rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
+  .contact-section__form-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem 1rem;
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .contact-section__form-foot a {
+    color: var(--paper-soft);
+    transition: color var(--dur);
+  }
+
+  .contact-section__form-foot a:hover {
+    color: var(--accent-ink);
+  }
+</style>

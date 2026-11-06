@@ -1,0 +1,247 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import MainLayout from './MainLayout.astro';
+import Breadcrumb from '@/components/ui/Breadcrumb.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface MetaItem {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow?: string;
+  breadcrumb: Crumb[];
+  meta?: MetaItem[];
+  lead?: string;
+  image?: string | ImageMetadata;
+  imageAlt?: string;
+  imageCaption?: string;
+  statusLabel?: string;
+  publishedTime?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  eyebrow,
+  breadcrumb,
+  meta = [],
+  lead,
+  image,
+  imageAlt = '',
+  imageCaption,
+  statusLabel,
+  publishedTime,
+  noindex,
+  jsonLd,
+} = Astro.props;
+
+const seoImage = typeof image === 'string' ? image : image?.src;
+---
+
+<MainLayout
+  title={`${title} — PT Siba Surya`}
+  description={description}
+  image={seoImage}
+  imageAlt={imageAlt}
+  type="article"
+  noindex={noindex}
+  publishedTime={publishedTime}
+  jsonLd={jsonLd}
+>
+  <div class="shell">
+    <Breadcrumb items={breadcrumb} />
+  </div>
+
+  <header class="article-header">
+    <div class="shell article-header__inner">
+      <div class="article-header__main">
+        {eyebrow && <SectionLabel text={eyebrow} />}
+        <h1 class="display display--h1 article-header__title">{title}</h1>
+        {lead && <p class="lead article-header__lead">{lead}</p>}
+        {statusLabel && (
+          <p class="article-header__status">
+            <Icon name="file" size={13} />
+            {statusLabel}
+          </p>
+        )}
+      </div>
+
+      {meta.length > 0 && (
+        <dl class="article-header__meta">
+          {meta.map((item) => (
+            <div class="article-header__meta-item">
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </div>
+  </header>
+
+  {image && (
+    <figure class="article-figure shell">
+      <div class="article-figure__frame image-frame">
+        {typeof image === 'string' ? (
+          <img src={image} alt={imageAlt} width="1600" height="900" loading="eager" decoding="async" />
+        ) : (
+          <Image
+            src={image}
+            alt={imageAlt}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 64rem) 88vw, 100vw"
+            format="webp"
+            quality={80}
+            loading="eager"
+            decoding="async"
+          />
+        )}
+      </div>
+      {imageCaption && <figcaption class="article-figure__caption">{imageCaption}</figcaption>}
+    </figure>
+  )}
+
+  <div class="shell article-layout">
+    <div class="article-body prose">
+      <slot />
+    </div>
+    <aside class="article-aside">
+      <slot name="aside" />
+    </aside>
+  </div>
+
+  <div class="shell article-footer">
+    <slot name="footer" />
+  </div>
+</MainLayout>
+
+<style>
+  .article-header {
+    padding-block: clamp(2rem, 4.5vw, 4rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .article-header__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: end;
+  }
+
+  @media (min-width: 60rem) {
+    .article-header__inner {
+      grid-template-columns: minmax(0, 1.8fr) minmax(14rem, 0.7fr);
+    }
+  }
+
+  .article-header__title {
+    margin-top: 1.1rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .article-header__lead {
+    margin-top: 1.4rem;
+  }
+
+  .article-header__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--paper-soft);
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .article-header__status svg {
+    color: var(--accent-ink);
+  }
+
+  .article-header__meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .article-header__meta-item {
+    padding: 0.9rem 0.75rem 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .article-header__meta-item dt {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.35rem;
+  }
+
+  .article-header__meta-item dd {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--paper-soft);
+  }
+
+  .article-figure {
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .article-figure__frame {
+    aspect-ratio: 21 / 9;
+    max-height: 34rem;
+  }
+
+  .article-figure__caption {
+    margin-top: 0.65rem;
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .article-layout {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  @media (min-width: 60rem) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1.9fr) minmax(14rem, 0.7fr);
+    }
+  }
+
+  .article-body {
+    min-width: 0;
+  }
+
+  .article-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .article-footer {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+</style>

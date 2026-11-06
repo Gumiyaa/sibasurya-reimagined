@@ -1,0 +1,205 @@
+---
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { newsArticles, newsBySlug } from '@/data/news';
+
+export function getStaticPaths() {
+  return newsArticles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const related = newsArticles.filter((item) => item.slug !== article.slug).slice(0, 3);
+const current = newsBySlug[article.slug] ?? article;
+---
+
+<ArticleLayout
+  title={current.title}
+  description={current.excerpt}
+  eyebrow={`${current.category} · newsroom`}
+  breadcrumb={[
+    { label: 'Beranda', href: '/' },
+    { label: 'Berita', href: '/news/' },
+    { label: current.category },
+  ]}
+  lead={current.excerpt}
+  statusLabel="Draft editorial — belum diterbitkan"
+  publishedTime={current.publishedAt ?? undefined}
+  meta={[
+    { label: 'Kategori', value: current.category },
+    { label: 'Waktu baca', value: current.readingTime },
+    { label: 'Status', value: 'Draft' },
+    { label: 'Tanggal', value: 'Belum terbit' },
+  ]}
+  image={current.image}
+  imageAlt={current.alt}
+  imageCaption="Fotografi stok sementara — bukan dokumentasi peristiwa"
+  noindex
+>
+  <div class="draft-note" role="note">
+    <Icon name="file" size={14} />
+    <p>
+      Artikel ini adalah <strong>draf editorial</strong> yang disiapkan untuk menguji
+      template berita. Isinya belum diverifikasi, tidak memuat pengumuman resmi, dan
+      tidak diindeks mesin pencari. Konten akan diganti sebelum publikasi.
+    </p>
+  </div>
+
+  {current.body.map((paragraph) => <p>{paragraph}</p>)}
+
+  <p class="draft-disclaimer">
+    Catatan: situs sebelumnya tidak memiliki arsip berita yang diterbitkan. Draf ini
+    disusun dari materi profil yang tersedia dan tidak menambahkan peristiwa, tanggal,
+    atau klaim baru.
+  </p>
+
+  <Fragment slot="aside">
+    <InformationPanel label="Status artikel" index="DRAFT" tone="accent">
+      <p>
+        Belum diterbitkan. Halaman diberi <code>noindex</code> dan dikeluarkan dari
+        sitemap sampai ada persetujuan editorial.
+      </p>
+    </InformationPanel>
+
+    <InformationPanel label="Artikel lain" index="N1" title="Indeks draf">
+      <ul class="aside-list">
+        {related.map((item) => (
+          <li>
+            <a href={`/news/${item.slug}/`}>
+              <span>{item.title}</span>
+              <Icon name="arrow-up-right" size={12} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </InformationPanel>
+
+    <InformationPanel label="Informasi resmi" index="PR">
+      <p>
+        Untuk pertanyaan media atau verifikasi informasi, hubungi kanal resmi
+        perusahaan.
+      </p>
+      <a class="link-arrow aside-link" href="/contact/">
+        Kontak perusahaan
+        <Icon name="arrow-right" size={13} />
+      </a>
+    </InformationPanel>
+  </Fragment>
+
+  <Fragment slot="footer">
+    <div class="article-footer-cta">
+      <div>
+        <h2 class="display display--h3">Butuh informasi operasional?</h2>
+        <p class="copy">Tim dispatch dapat membantu pertanyaan teknis dan permintaan penawaran.</p>
+      </div>
+      <div class="article-footer-cta__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Hubungi dispatch</PrimaryButton>
+        <SecondaryButton href="/news/" icon="arrow-up-right">Kembali ke indeks</SecondaryButton>
+      </div>
+    </div>
+  </Fragment>
+</ArticleLayout>
+
+<style>
+  .draft-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--accent-line);
+    border-left: 2px solid var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .draft-note svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .draft-note p {
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--paper-soft);
+  }
+
+  .draft-note strong {
+    color: var(--paper);
+    font-weight: 600;
+  }
+
+  .draft-disclaimer {
+    margin-top: 1.5rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.66rem;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+
+  .aside-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .aside-list a {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .aside-list li:last-child a {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .aside-list a:hover {
+    color: var(--paper);
+  }
+
+  .aside-list svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .aside-link {
+    margin-top: 0.8rem;
+  }
+
+  .article-footer-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    padding: clamp(1.15rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+  }
+
+  .article-footer-cta .copy {
+    margin-top: 0.45rem;
+    max-width: 52ch;
+  }
+
+  .article-footer-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

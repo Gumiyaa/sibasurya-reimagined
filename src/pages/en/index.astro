@@ -1,0 +1,574 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { company } from '@/data/company';
+import { fleetCategories } from '@/data/fleet';
+import { corridors } from '@/data/corridors';
+import { branches } from '@/data/branches';
+import { images } from '@/data/images';
+
+const capabilities = [
+  {
+    index: '01',
+    title: 'Heavy haulage',
+    body: 'Trailer capacity bands from 20–25 tonnes through 55–65 tonnes, configured for steel coil, plate, precast concrete and industrial machinery.',
+  },
+  {
+    index: '02',
+    title: 'Dedicated fleets',
+    body: 'Contract capacity and daily trip allocation for manufacturers that need predictable movement rather than spot transport.',
+  },
+  {
+    index: '03',
+    title: 'Corridor operations',
+    body: 'Scheduled industrial lanes across Java and Sumatra, coordinated from a central dispatch desk in Semarang.',
+  },
+  {
+    index: '04',
+    title: 'Maintenance discipline',
+    body: 'In-house workshop inspection and cargo securing procedures before every departure.',
+  },
+];
+---
+
+<MainLayout
+  title="PT Siba Surya — Heavy Haulage & Industrial Logistics (English overview)"
+  description="English overview of PT Siba Surya, an Indonesian heavy haulage and industrial logistics company established in 1951, operating across Java and Sumatra."
+  lang="en"
+  noindex
+>
+  <PageHero
+    index="EN"
+    label="English overview"
+    code="Est. 1951 · Semarang, Indonesia"
+    breadcrumb={[{ label: 'English overview' }]}
+    titleLines={['Heavy haulage', { text: 'across the archipelago.', accent: true }]}
+    lead="PT Siba Surya moves heavy industrial freight between ports, steel and cement plants, and project sites in Java and Sumatra. This page is a short English summary; the full site is currently published in Indonesian."
+    image={images.heroNight}
+    imageAlt="Heavy truck travelling on an industrial road at night"
+    imageCaption="Placeholder stock photography — not official company documentation"
+    meta={[
+      { label: 'Established', value: '1951' },
+      { label: 'Base', value: 'Semarang, Central Java' },
+      { label: 'Network', value: `${branches.length} depots · 2 islands` },
+      { label: 'Dispatch', value: '24/7 monitoring' },
+    ]}
+  >
+    <Fragment slot="actions">
+      <PrimaryButton href="/contact/" icon="arrow-right">Contact dispatch</PrimaryButton>
+      <SecondaryButton href="/" icon="arrow-right">Indonesian site</SecondaryButton>
+    </Fragment>
+  </PageHero>
+
+  <section class="en-intro section" aria-labelledby="en-intro-title">
+    <div class="shell en-intro__layout">
+      <div class="en-intro__main">
+        <SectionLabel index="01" text="Company" />
+        <SectionHeading
+          id="en-intro-title"
+          class="en-intro__heading"
+          lines={['Seven decades', { text: 'of industrial movement.', accent: true }]}
+          size="h2"
+        />
+        <p class="copy en-intro__copy">
+          Founded in 1951, PT Siba Surya grew alongside Indonesia's industrialisation.
+          The company operates heavy freight vehicles for steel, cement, construction
+          materials and general industrial cargo, connecting ports, plants and project
+          sites on the country's two largest islands.
+        </p>
+        <p class="copy en-intro__copy">
+          Operations are coordinated from a central dispatch desk and workshop in
+          Semarang, Central Java, with a network of depots supporting regional lanes.
+        </p>
+
+        <div class="en-notice" role="note">
+          <Icon name="globe" size={14} />
+          <p>
+            This English page is a summary only. Detailed fleet specifications,
+            branch pages, editorial content and forms are available on the Indonesian
+            site. Some operational data still requires official verification.
+          </p>
+        </div>
+      </div>
+
+      <aside class="en-intro__aside" aria-label="Company facts">
+        <InformationPanel label="Legal entity" index="HQ" title={company.legalName}>
+          <p>{company.hq.full}</p>
+          <p class="en-intro__contact-line">
+            <a href={`tel:${company.contact.phone}`}>{company.contact.phoneLabel}</a>
+            <br />
+            <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+          </p>
+        </InformationPanel>
+
+        <InformationPanel label="Certifications" index="STD">
+          <ul class="en-cert-list">
+            {company.certifications.map((certification) => (
+              <li>
+                <span class="en-cert-list__code">{certification.code}</span>
+                <span>{certification.label}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="en-intro__fine">
+            Certification scope and current validity must be confirmed with the company
+            before being relied on commercially.
+          </p>
+        </InformationPanel>
+      </aside>
+    </div>
+  </section>
+
+  <section class="en-capabilities section section--ink-2" aria-labelledby="en-capabilities-title">
+    <div class="shell">
+      <div class="en-capabilities__head">
+        <SectionLabel index="02" text="Capabilities" />
+        <SectionHeading
+          id="en-capabilities-title"
+          lines={['What the fleet', { text: 'is configured to do.', accent: true }]}
+          size="h2"
+        />
+      </div>
+
+      <div class="en-capabilities__grid">
+        {capabilities.map((item) => (
+          <article class="en-capability">
+            <span class="en-capability__index num">{item.index}</span>
+            <h3 class="en-capability__title">{item.title}</h3>
+            <p class="en-capability__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="en-capabilities__fleet">
+        <span class="micro">Capacity bands in the current catalog</span>
+        <div class="en-fleet-band">
+          {fleetCategories.map((category) => (
+            <span class="en-fleet-band__item">
+              <span class="en-fleet-band__name">{category.shortName}</span>
+              <span class="en-fleet-band__value">{category.capacity}</span>
+            </span>
+          ))}
+        </div>
+        <p class="en-intro__fine">
+          Bands reproduced from the approved design reference. Availability, exact
+          axle configuration and commercial terms must be confirmed by dispatch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="en-network section" aria-labelledby="en-network-title">
+    <div class="shell">
+      <div class="en-network__head">
+        <div>
+          <SectionLabel index="03" text="Network" />
+          <SectionHeading
+            id="en-network-title"
+            class="en-network__heading"
+            lines={['Ports, plants', { text: 'and project lanes.', accent: true }]}
+            size="h2"
+          />
+        </div>
+        <p class="copy en-network__lead">
+          Indicative corridor distances, not schedules or rate cards. Lanes are
+          coordinated through central dispatch.
+        </p>
+      </div>
+
+      <ul class="en-corridor-list">
+        {corridors.map((corridor) => (
+          <li class="en-corridor">
+            <span class="en-corridor__index num">{corridor.index}</span>
+            <div class="en-corridor__main">
+              <span class="en-corridor__route">{corridor.route}</span>
+              <span class="en-corridor__commodities">{corridor.commodities}</span>
+            </div>
+            <span class="en-corridor__distance num">{corridor.distance}</span>
+            <span class="en-corridor__status">{corridor.status}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="en-network__actions">
+        <PrimaryButton href="/contact/" icon="arrow-right">Request a quotation</PrimaryButton>
+        <SecondaryButton href="/network/" icon="arrow-up-right">Network detail (ID)</SecondaryButton>
+      </div>
+    </div>
+  </section>
+
+  <section class="en-contact section section--surface" aria-labelledby="en-contact-title">
+    <div class="shell en-contact__inner">
+      <div>
+        <SectionLabel index="04" text="Contact" />
+        <h2 class="display display--h2 en-contact__title" id="en-contact-title">
+          Talk to <span class="accent">central dispatch.</span>
+        </h2>
+        <p class="copy en-contact__copy">
+          Send origin, destination, commodity, estimated tonnage and dimensions for an
+          operational review. The inquiry form is on the Indonesian contact page.
+        </p>
+      </div>
+      <div class="en-contact__channels">
+        <a href={`tel:${company.contact.phone}`}>
+          <Icon name="phone" size={15} />
+          {company.contact.phoneLabel}
+        </a>
+        <a href={`mailto:${company.contact.email}`}>
+          <Icon name="mail" size={15} />
+          {company.contact.email}
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .en-intro__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .en-intro__layout {
+      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    }
+  }
+
+  .en-intro__heading {
+    margin-top: 1rem;
+  }
+
+  .en-intro__copy {
+    margin-top: 1.1rem;
+    max-width: 62ch;
+  }
+
+  .en-intro__copy + .en-intro__copy {
+    margin-top: 0.9rem;
+  }
+
+  .en-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+  }
+
+  .en-notice svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .en-notice p {
+    max-width: 74ch;
+    font-size: 0.68rem;
+    line-height: 1.7;
+  }
+
+  .en-intro__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .en-intro__contact-line {
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .en-intro__contact-line a {
+    color: var(--paper-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .en-intro__contact-line a:hover {
+    color: var(--accent-ink);
+  }
+
+  .en-cert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .en-cert-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .en-cert-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .en-cert-list__code {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--paper);
+  }
+
+  .en-intro__fine {
+    margin-top: 0.85rem;
+    font-size: 0.64rem;
+    line-height: 1.65;
+    color: var(--dim);
+  }
+
+  /* Capabilities ------------------------------------------------------- */
+  .en-capabilities__head {
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .en-capabilities__head :global(.section-heading) {
+    margin-top: 1rem;
+  }
+
+  .en-capabilities__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .en-capabilities__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .en-capabilities__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .en-capability {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.32);
+  }
+
+  .en-capability__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .en-capability__title {
+    margin-top: 0.55rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 1.9vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .en-capability__body {
+    margin-top: 0.6rem;
+    font-size: var(--fs-xs);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .en-capabilities__fleet {
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .en-fleet-band {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0.8rem;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  @media (min-width: 48rem) {
+    .en-fleet-band {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .en-fleet-band__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.85rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .en-fleet-band__name {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .en-fleet-band__value {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2vw, 1.7rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--paper);
+  }
+
+  /* Network ------------------------------------------------------------ */
+  .en-network__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  @media (min-width: 56rem) {
+    .en-network__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .en-network__heading {
+    margin-top: 1rem;
+  }
+
+  .en-network__lead {
+    max-width: 38ch;
+  }
+
+  .en-corridor-list {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .en-corridor {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  @media (min-width: 48rem) {
+    .en-corridor {
+      grid-template-columns: 3.5rem minmax(0, 1fr) 7rem 8rem;
+      align-items: center;
+    }
+  }
+
+  .en-corridor__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.12em;
+    color: var(--accent-ink);
+  }
+
+  .en-corridor__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .en-corridor__route {
+    font-size: var(--fs-sm);
+    color: var(--paper);
+  }
+
+  .en-corridor__commodities {
+    font-size: var(--fs-xs);
+    color: var(--muted);
+  }
+
+  .en-corridor__distance {
+    font-size: var(--fs-xs);
+    color: var(--paper-soft);
+  }
+
+  .en-corridor__status {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--accent-ink);
+  }
+
+  @media (max-width: 47.99rem) {
+    .en-corridor__distance,
+    .en-corridor__status {
+      grid-column: 2;
+    }
+  }
+
+  .en-network__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Contact ------------------------------------------------------------ */
+  .en-contact__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .en-contact__title {
+    margin-top: 1rem;
+  }
+
+  .en-contact__copy {
+    margin-top: 0.9rem;
+    max-width: 52ch;
+  }
+
+  .en-contact__channels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .en-contact__channels a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.6rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--line);
+    font-size: var(--fs-sm);
+    color: var(--paper-soft);
+    transition:
+      border-color var(--dur),
+      color var(--dur);
+  }
+
+  .en-contact__channels a:hover {
+    border-color: var(--accent-line);
+    color: var(--paper);
+  }
+
+  .en-contact__channels svg {
+    color: var(--accent-ink);
+  }
+</style>

@@ -1,0 +1,382 @@
+---
+import { contact } from '@/data/contact';
+import { company } from '@/data/company';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  compact?: boolean;
+  headingId?: string;
+}
+
+const { compact = false, headingId } = Astro.props;
+---
+
+<form
+  class:list={['inquiry-form', { 'inquiry-form--compact': compact }]}
+  data-contact-form
+  data-fallback-email={company.contact.email}
+  data-fallback-phone={company.contact.phoneLabel}
+  novalidate
+  aria-labelledby={headingId}
+>
+  <div class="inquiry-form__grid">
+    <div class="field">
+      <label for="inquiry-name">Nama lengkap <span aria-hidden="true">*</span></label>
+      <input id="inquiry-name" name="name" type="text" autocomplete="name" required aria-describedby="err-name" />
+      <p class="field__error" id="err-name" data-error-for="name"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-company">Perusahaan</label>
+      <input id="inquiry-company" name="company" type="text" autocomplete="organization" aria-describedby="err-company" />
+      <p class="field__error" id="err-company" data-error-for="company"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-email">Email <span aria-hidden="true">*</span></label>
+      <input id="inquiry-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="err-email" />
+      <p class="field__error" id="err-email" data-error-for="email"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-phone">Telepon / WhatsApp <span aria-hidden="true">*</span></label>
+      <input id="inquiry-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="err-phone" />
+      <p class="field__error" id="err-phone" data-error-for="phone"></p>
+    </div>
+
+    <div class="field field--full">
+      <label for="inquiry-type">Jenis permintaan <span aria-hidden="true">*</span></label>
+      <select id="inquiry-type" name="inquiryType" required aria-describedby="err-inquiryType">
+        <option value="">Pilih jenis permintaan</option>
+        {contact.inquiryOptions.map((option) => <option value={option}>{option}</option>)}
+      </select>
+      <p class="field__error" id="err-inquiryType" data-error-for="inquiryType"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-origin">Kota / lokasi asal</label>
+      <input id="inquiry-origin" name="origin" type="text" placeholder="Contoh: Cilegon" aria-describedby="err-origin" />
+      <p class="field__error" id="err-origin" data-error-for="origin"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-destination">Kota / lokasi tujuan</label>
+      <input id="inquiry-destination" name="destination" type="text" placeholder="Contoh: Semarang" aria-describedby="err-destination" />
+      <p class="field__error" id="err-destination" data-error-for="destination"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-commodity">Komoditas</label>
+      <select id="inquiry-commodity" name="commodity" aria-describedby="err-commodity">
+        <option value="">Pilih komoditas</option>
+        {contact.commodityOptions.map((option) => <option value={option}>{option}</option>)}
+      </select>
+      <p class="field__error" id="err-commodity" data-error-for="commodity"></p>
+    </div>
+
+    <div class="field">
+      <label for="inquiry-volume">Estimasi volume</label>
+      <input id="inquiry-volume" name="volume" type="text" placeholder="Contoh: 420 ton / bulan" aria-describedby="err-volume" />
+      <p class="field__error" id="err-volume" data-error-for="volume"></p>
+    </div>
+
+    <div class="field field--full">
+      <label for="inquiry-message">Detail permintaan <span aria-hidden="true">*</span></label>
+      <textarea
+        id="inquiry-message"
+        name="message"
+        rows="4"
+        required
+        placeholder="Jelaskan kebutuhan angkutan, jadwal, dimensi kargo, atau pertanyaan Anda."
+        aria-describedby="err-message"
+      ></textarea>
+      <p class="field__error" id="err-message" data-error-for="message"></p>
+    </div>
+
+    <div class="inquiry-form__honeypot" aria-hidden="true">
+      <label for="inquiry-website">Website</label>
+      <input id="inquiry-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="inquiry-form__actions">
+    <PrimaryButton type="submit" block={compact} icon="arrow-right">
+      <span data-submit-label>Kirim permintaan</span>
+    </PrimaryButton>
+  </div>
+
+  <p class="inquiry-form__note">
+    <Icon name="shield" size={13} />
+    <span>{contact.formNote}</span>
+  </p>
+
+  <div class="form-status" data-form-status role="status" aria-live="polite" hidden></div>
+
+  <div class="inquiry-form__direct" data-form-direct hidden>
+    <span>Kanal resmi:</span>
+    <a href={`mailto:${company.contact.email}`} data-fallback-mail>
+      <Icon name="mail" size={13} /> Email dispatch
+    </a>
+    <a href={`tel:${company.contact.phone}`}>
+      <Icon name="phone" size={13} /> {company.contact.phoneLabel}
+    </a>
+  </div>
+</form>
+
+<script>
+  import { submitInquiry, type InquiryPayload } from '@/lib/api/inquiries';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  type FieldName = keyof InquiryPayload;
+
+  const requiredFields: FieldName[] = ['name', 'email', 'phone', 'inquiryType', 'message'];
+
+  const validators: Partial<Record<FieldName, (value: string) => string | null>> = {
+    name: (value) => (value.trim().length < 2 ? 'Masukkan nama lengkap.' : null),
+    email: (value) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()) ? null : 'Masukkan alamat email yang valid.',
+    phone: (value) =>
+      value.replace(/\D/g, '').length >= 8 ? null : 'Masukkan nomor telepon yang valid (min. 8 digit).',
+    inquiryType: (value) => (value ? null : 'Pilih jenis permintaan.'),
+    message: (value) => (value.trim().length < 12 ? 'Tuliskan detail permintaan (min. 12 karakter).' : null),
+  };
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    const direct = form.querySelector<HTMLElement>('[data-form-direct]');
+    const mailLink = form.querySelector<HTMLAnchorElement>('[data-fallback-mail]');
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]');
+    const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const setError = (name: FieldName, message: string | null) => {
+      const field = form.elements.namedItem(name);
+      const error = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      if (field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement) {
+        field.setAttribute('aria-invalid', message ? 'true' : 'false');
+      }
+      if (error) error.textContent = message ?? '';
+    };
+
+    const getValue = (name: FieldName): string => {
+      const data = new FormData(form);
+      const value = data.get(name);
+      return typeof value === 'string' ? value : '';
+    };
+
+    const validate = (): boolean => {
+      let valid = true;
+      const invalidFields: HTMLElement[] = [];
+
+      requiredFields.forEach((name) => {
+        const message = validators[name]?.(getValue(name)) ?? null;
+        setError(name, message);
+        if (message) {
+          valid = false;
+          const field = form.elements.namedItem(name);
+          if (field instanceof HTMLElement) invalidFields.push(field);
+        }
+      });
+
+      const firstInvalid = invalidFields[0];
+      if (firstInvalid) {
+        firstInvalid.focus();
+        firstInvalid.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+
+      return valid;
+    };
+
+    form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]').forEach((field) => {
+      field.addEventListener('input', () => {
+        const name = field.name as FieldName;
+        if (field.getAttribute('aria-invalid') === 'true') {
+          setError(name, validators[name]?.(field.value) ?? null);
+        }
+      });
+
+      field.addEventListener('blur', () => {
+        const name = field.name as FieldName;
+        if (validators[name]) {
+          setError(name, validators[name]?.(field.value) ?? null);
+        }
+      });
+    });
+
+    const showStatus = (kind: 'ok' | 'error' | 'info', html: string) => {
+      if (!status) return;
+      status.hidden = false;
+      status.className = `form-status${kind === 'ok' ? ' form-status--ok' : kind === 'error' ? ' form-status--error' : ''}`;
+      status.innerHTML = html;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!validate()) {
+        showStatus('error', '<strong>Periksa kembali formulir.</strong> Beberapa kolom wajib belum valid.');
+        return;
+      }
+
+      const payload: InquiryPayload = {
+        name: getValue('name').trim(),
+        company: getValue('company').trim(),
+        email: getValue('email').trim(),
+        phone: getValue('phone').trim(),
+        origin: getValue('origin').trim(),
+        destination: getValue('destination').trim(),
+        commodity: getValue('commodity').trim(),
+        volume: getValue('volume').trim(),
+        message: getValue('message').trim(),
+        inquiryType: getValue('inquiryType').trim(),
+      };
+
+      if (getValue('website' as FieldName)) {
+        showStatus('info', 'Permintaan tidak dapat diproses.');
+        return;
+      }
+
+      const fallbackEmail = form.dataset.fallbackEmail ?? 'surya@sibagroup.net';
+      const mailSubject = `Permintaan angkutan — ${payload.company || payload.name}`;
+      const mailBody = [
+        `Nama: ${payload.name}`,
+        `Perusahaan: ${payload.company || '-'}`,
+        `Email: ${payload.email}`,
+        `Telepon: ${payload.phone}`,
+        `Jenis permintaan: ${payload.inquiryType}`,
+        `Asal: ${payload.origin || '-'}`,
+        `Tujuan: ${payload.destination || '-'}`,
+        `Komoditas: ${payload.commodity || '-'}`,
+        `Volume: ${payload.volume || '-'}`,
+        '',
+        payload.message,
+      ].join('\n');
+
+      if (mailLink) {
+        mailLink.href = `mailto:${fallbackEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+      }
+      if (direct) direct.hidden = false;
+
+      if (submitButton) submitButton.disabled = true;
+      if (submitLabel) submitLabel.textContent = 'Memproses…';
+
+      const result = await submitInquiry(payload);
+
+      if (submitButton) submitButton.disabled = false;
+      if (submitLabel) submitLabel.textContent = 'Kirim permintaan';
+
+      if (result.status === 'sent') {
+        showStatus(
+          'ok',
+          `<strong>Permintaan tercatat.</strong> Referensi <span class="num">${result.reference}</span>. Tim dispatch akan menindaklanjuti melalui kontak yang Anda berikan.`,
+        );
+        form.reset();
+        form.querySelectorAll('[aria-invalid]').forEach((field) => field.setAttribute('aria-invalid', 'false'));
+        form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((error) => (error.textContent = ''));
+      } else if (result.status === 'not-configured') {
+        showStatus(
+          'info',
+          '<strong>Permintaan belum terkirim.</strong> Formulir ini belum terhubung ke backend produksi, jadi tidak ada data yang tersimpan. Gunakan tombol email di bawah untuk mengirim ringkasan melalui kanal resmi, atau hubungi dispatch langsung.',
+        );
+      } else {
+        showStatus(
+          'error',
+          `<strong>Pengiriman gagal.</strong> ${result.message} Silakan gunakan kanal email atau telepon di bawah.`,
+        );
+      }
+    });
+  }
+</script>
+
+<style>
+  .inquiry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .inquiry-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem 1rem;
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+
+  .inquiry-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .inquiry-form__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .inquiry-form__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.66rem;
+    line-height: 1.6;
+    color: var(--dim);
+  }
+
+  .inquiry-form__note svg {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--accent-ink);
+  }
+
+  .inquiry-form__direct {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .inquiry-form__direct a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--paper-soft);
+    transition: color var(--dur);
+  }
+
+  .inquiry-form__direct a:hover {
+    color: var(--accent-ink);
+  }
+
+  .inquiry-form__direct svg {
+    color: var(--accent-ink);
+  }
+
+  .inquiry-form :global(.form-status strong) {
+    color: var(--paper);
+    font-weight: 600;
+  }
+
+  .inquiry-form :global(.form-status a) {
+    color: var(--paper);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 40rem) {
+    .inquiry-form__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

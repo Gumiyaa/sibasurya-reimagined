@@ -1,0 +1,104 @@
+---
+interface Props {
+  label?: string;
+  index?: string;
+  title?: string;
+  tone?: 'default' | 'accent' | 'plain';
+  class?: string;
+  as?: 'section' | 'div' | 'aside';
+}
+
+const {
+  label,
+  index,
+  title,
+  tone = 'default',
+  class: className,
+  as: Tag = 'div',
+} = Astro.props;
+---
+
+<Tag class:list={['info-panel', `info-panel--${tone}`, className]}>
+  {(label || index) && (
+    <header class="info-panel__head">
+      {index && <span class="info-panel__index num">{index}</span>}
+      {label && <span class="info-panel__label">{label}</span>}
+    </header>
+  )}
+  {title && <h3 class="info-panel__title">{title}</h3>}
+  <div class="info-panel__body">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .info-panel {
+    position: relative;
+    padding: clamp(1.15rem, 2.2vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.4);
+  }
+
+  .info-panel--accent {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+
+  .info-panel--plain {
+    border: 0;
+    background: none;
+    padding: 0;
+  }
+
+  .info-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .info-panel--accent .info-panel__head {
+    border-color: var(--accent-line);
+  }
+
+  .info-panel__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.16em;
+    color: var(--accent-ink);
+  }
+
+  .info-panel__label {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .info-panel__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.6vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.75rem;
+  }
+
+  .info-panel__body {
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .info-panel__body :global(p + p) {
+    margin-top: 0.75em;
+  }
+
+  .info-panel__body :global(strong) {
+    color: var(--paper);
+    font-weight: 500;
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { company } from '@/data/company';
+import HeroSection from '@/components/sections/HeroSection.astro';
+import StatsSection from '@/components/sections/StatsSection.astro';
+import LegacySection from '@/components/sections/LegacySection.astro';
+import FleetSection from '@/components/sections/FleetSection.astro';
+import ServicesSection from '@/components/sections/ServicesSection.astro';
+import NetworkSection from '@/components/sections/NetworkSection.astro';
+import ValuesSection from '@/components/sections/ValuesSection.astro';
+import IntegritySection from '@/components/sections/IntegritySection.astro';
+import ContactSection from '@/components/sections/ContactSection.astro';
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'PT Siba Surya',
+  url: Astro.site?.href ?? 'https://sibasurya.com',
+  inLanguage: 'id-ID',
+};
+---
+
+<MainLayout
+  title={company.seo.title}
+  description={company.seo.description}
+  jsonLd={websiteSchema}
+>
+  <HeroSection />
+  <StatsSection />
+  <LegacySection />
+  <FleetSection />
+  <ServicesSection />
+  <NetworkSection />
+  <ValuesSection />
+  <IntegritySection />
+  <ContactSection />
+</MainLayout>

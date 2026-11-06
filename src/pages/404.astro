@@ -1,0 +1,180 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { mainNavigation } from '@/data/navigation';
+
+const suggestions = mainNavigation.slice(0, 4);
+---
+
+<MainLayout
+  title="Halaman tidak ditemukan — PT Siba Surya"
+  description="Halaman yang diminta tidak tersedia. Gunakan navigasi atau kembali ke beranda PT Siba Surya."
+  noindex
+>
+  <section class="not-found" aria-labelledby="not-found-title">
+    <div class="not-found__grid-bg" aria-hidden="true"></div>
+    <div class="shell not-found__inner">
+      <div class="not-found__main">
+        <SectionLabel index="404" text="Route not found" />
+        <p class="not-found__code display" aria-hidden="true">404</p>
+        <h1 class="display display--h1 not-found__title" id="not-found-title">
+          Jalur ini <span class="accent">tidak terpetakan.</span>
+        </h1>
+        <p class="lead not-found__lead">
+          Halaman yang Anda cari mungkin telah dipindahkan atau alamatnya tidak
+          lengkap. Gunakan tautan berikut untuk kembali ke rute operasional situs.
+        </p>
+
+        <div class="not-found__actions">
+          <PrimaryButton href="/" icon="arrow-right">Kembali ke beranda</PrimaryButton>
+          <SecondaryButton href="/contact/" icon="arrow-up-right">Hubungi dispatch</SecondaryButton>
+        </div>
+      </div>
+
+      <nav class="not-found__nav" aria-label="Tautan alternatif">
+        <span class="micro">Rute alternatif</span>
+        <ul>
+          {suggestions.map((item) => (
+            <li>
+              <a href={item.href}>
+                <span class="not-found__nav-index num">{item.index}</span>
+                <span class="not-found__nav-label">{item.label}</span>
+                <Icon name="arrow-right" size={14} />
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="/network/">
+              <span class="not-found__nav-index num">05</span>
+              <span class="not-found__nav-label">Jaringan depot</span>
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(32rem, 72vh, 46rem);
+    padding-block: clamp(3rem, 7vw, 6rem);
+    overflow: hidden;
+    background:
+      radial-gradient(900px 420px at 78% 12%, rgba(226, 29, 46, 0.09), transparent 70%),
+      var(--ink);
+  }
+
+  .not-found__grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(41, 46, 56, 0.26) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(41, 46, 56, 0.26) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 92%);
+    pointer-events: none;
+  }
+
+  .not-found__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+  }
+
+  @media (min-width: 60rem) {
+    .not-found__inner {
+      grid-template-columns: minmax(0, 1.2fr) minmax(17rem, 0.8fr);
+    }
+  }
+
+  .not-found__code {
+    margin-top: 1.2rem;
+    font-size: clamp(5rem, 14vw, 11rem);
+    font-weight: 700;
+    line-height: 0.7;
+    letter-spacing: -0.03em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-strong);
+  }
+
+  .not-found__title {
+    margin-top: 0.9rem;
+    max-width: 18ch;
+  }
+
+  .not-found__title .accent {
+    color: var(--accent-ink);
+  }
+
+  .not-found__lead {
+    margin-top: 1.1rem;
+    max-width: 52ch;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+  }
+
+  .not-found__nav {
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.4);
+  }
+
+  .not-found__nav ul {
+    margin-top: 0.85rem;
+  }
+
+  .not-found__nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    transition: color var(--dur);
+  }
+
+  .not-found__nav li:last-child a {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .not-found__nav a:hover {
+    color: var(--paper);
+  }
+
+  .not-found__nav a:hover svg {
+    color: var(--accent-ink);
+  }
+
+  .not-found__nav-index {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+  }
+
+  .not-found__nav-label {
+    flex: 1;
+    font-size: var(--fs-sm);
+  }
+
+  .not-found__nav svg {
+    flex: none;
+    color: var(--dim);
+    transition: color var(--dur);
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+import type { NavigationItem } from '@/types';
+import { isNavigationActive } from '@/lib/navigation';
+
+interface Props {
+  items: NavigationItem[];
+  pathname: string;
+}
+
+const { items, pathname } = Astro.props;
+---
+
+<nav class="desktop-nav" aria-label="Navigasi utama">
+  <ul class="desktop-nav__list">
+    {items.map((item) => {
+      const active = isNavigationActive(pathname, item.href);
+      return (
+        <li class="desktop-nav__item">
+          <a
+            class:list={['desktop-nav__link', { 'is-active': active }]}
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+          >
+            <span class="desktop-nav__index">{item.index}</span>
+            <span class="desktop-nav__label">{item.label}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .desktop-nav {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .desktop-nav {
+      display: block;
+    }
+  }
+
+  .desktop-nav__list {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(0.35rem, 1.15vw, 1.15rem);
+  }
+
+  .desktop-nav__item {
+    display: flex;
+  }
+
+  .desktop-nav__link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.28rem;
+    padding: 0.35rem 0.15rem;
+    color: var(--muted);
+    transition: color var(--dur) var(--ease-out);
+  }
+
+  .desktop-nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.4rem;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .desktop-nav__link:hover {
+    color: var(--paper);
+  }
+
+  .desktop-nav__link:hover::after,
+  .desktop-nav__link.is-active::after {
+    transform: scaleX(1);
+  }
+
+  .desktop-nav__link.is-active {
+    color: var(--paper);
+  }
+
+  .desktop-nav__index {
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    line-height: 1;
+  }
+
+  .desktop-nav__link.is-active .desktop-nav__index {
+    color: var(--accent-ink);
+  }
+
+  .desktop-nav__label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 75rem) {
+    .desktop-nav__label {
+      font-size: 0.72rem;
+    }
+  }
+</style>

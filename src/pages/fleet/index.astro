@@ -1,0 +1,327 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import FleetCard from '@/components/fleet/FleetCard.astro';
+import TechnicalDataTable from '@/components/ui/TechnicalDataTable.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { fleetCategories } from '@/data/fleet';
+import { images } from '@/data/images';
+
+const filters = [
+  { value: 'all', label: 'Semua' },
+  { value: 'heavy-haulage', label: 'Heavy' },
+  { value: 'medium-carrier', label: 'Medium' },
+  { value: 'light-flatbed', label: 'Light' },
+  { value: 'wingbox-enclosed', label: 'Wingbox' },
+];
+
+const compareRows = fleetCategories.map((category) => [
+  { text: category.code, mono: true },
+  category.name,
+  { text: category.capacity, accent: true },
+  category.axle,
+  category.commodities.slice(0, 2).join(' · '),
+]);
+
+const imageHero = images.fleetRow;
+---
+
+<MainLayout
+  title="Armada — PT Siba Surya"
+  description="Katalog armada PT Siba Surya: heavy haulage 55–65 ton, medium carrier 35–45 ton, light flatbed 20–25 ton, dan wingbox enclosed 25 ton untuk kebutuhan logistik industri."
+>
+  <PageHero
+    index="03"
+    label="Fleet capability catalog"
+    code="Fleet register · 04 classes"
+    titleLines={['Kapabilitas armada,', { text: 'dari 20 hingga 65 ton.', accent: true }]}
+    lead="Empat kelas armada untuk material industri: dari unit lincah untuk transfer plant-to-warehouse hingga heavy haulage untuk komoditas terberat."
+    image={imageHero}
+    imageAlt="Barisan truk trailer terparkir di area depo logistik"
+    imageCaption="Dokumentasi armada — fotografi stok sementara"
+    meta={[
+      { label: 'Kelas armada', value: '4 kategori' },
+      { label: 'Rentang muatan', value: '20.000–65.000 kg' },
+      { label: 'Populasi', value: '1.600+ unit*' },
+      { label: 'Monitoring', value: 'GPS 24/7' },
+    ]}
+  />
+
+  <section class="fleet-catalog section" aria-labelledby="catalog-title">
+    <div class="shell">
+      <div class="fleet-catalog__head">
+        <div>
+          <SectionLabel index="01" text="Pilih kategori" />
+          <SectionHeading
+            id="catalog-title"
+            class="fleet-catalog__heading"
+            lines={['Satu standar,', { text: 'empat konfigurasi.', accent: true }]}
+          />
+        </div>
+        <p class="copy fleet-catalog__lead">
+          Filter katalog berdasarkan kelas armada. Setiap kategori memiliki halaman
+          spesifikasi yang dapat dibuka untuk detail konfigurasi dan komoditas.
+        </p>
+      </div>
+
+      <div class="fleet-catalog__toolbar" role="group" aria-label="Filter kategori armada">
+        <div class="fleet-catalog__filters">
+          {filters.map((filter, index) => (
+            <button
+              class:list={['fleet-filter', { 'is-active': index === 0 }]}
+              type="button"
+              data-fleet-filter={filter.value}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+        <p class="fleet-catalog__count" aria-live="polite">
+          <span data-fleet-count>{fleetCategories.length}</span> kategori ditampilkan
+        </p>
+      </div>
+
+      <div class="fleet-catalog__grid" data-fleet-grid>
+        {fleetCategories.map((category, index) => (
+          <div class="fleet-catalog__item" data-fleet-item data-category={category.slug}>
+            <FleetCard category={category} index={String(index + 1).padStart(2, '0')} />
+          </div>
+        ))}
+      </div>
+
+      <p class="fleet-catalog__empty" data-fleet-empty hidden>
+        Tidak ada kategori pada filter ini.
+      </p>
+
+      <div class="fleet-catalog__compare">
+        <div class="fleet-catalog__compare-head">
+          <span class="micro">Perbandingan teknis</span>
+          <span class="micro">Register armada</span>
+        </div>
+        <TechnicalDataTable
+          caption="Kapasitas dan konfigurasi — verifikasi register resmi diperlukan"
+          columns={['Kode', 'Kategori', 'Daya muat', 'Konfigurasi', 'Komoditas utama']}
+          rows={compareRows}
+          minWidth="58rem"
+        />
+      </div>
+
+      <div class="fleet-catalog__note">
+        <Icon name="file" size={14} />
+        <p>
+          * Angka populasi, kapasitas, dan konfigurasi gandar mengacu pada approved design
+          reference. Data ini bukan penawaran komersial dan harus divalidasi terhadap
+          register armada resmi sebelum digunakan dalam kontrak.
+        </p>
+      </div>
+
+      <div class="fleet-catalog__cta">
+        <div>
+          <h2 class="display display--h3 fleet-catalog__cta-title">Tidak yakin unit mana yang tepat?</h2>
+          <p class="copy">Sampaikan tonase, dimensi, dan rute. Tim dispatch akan membantu memilih konfigurasi.</p>
+        </div>
+        <div class="fleet-catalog__actions">
+          <PrimaryButton href="/contact/" icon="arrow-right">Konsultasi armada</PrimaryButton>
+          <SecondaryButton href="/services/" icon="arrow-up-right">Lihat layanan</SecondaryButton>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-fleet-filter]'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-fleet-item]'));
+  const count = document.querySelector<HTMLElement>('[data-fleet-count]');
+  const empty = document.querySelector<HTMLElement>('[data-fleet-empty]');
+
+  const applyFilter = (filter: string, activeButton: HTMLButtonElement) => {
+    buttons.forEach((button) => {
+      const active = button === activeButton;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    let visible = 0;
+    items.forEach((item) => {
+      const show = filter === 'all' || item.dataset.category === filter;
+      item.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible > 0;
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      applyFilter(button.dataset.fleetFilter ?? 'all', button);
+    });
+  });
+</script>
+
+<style>
+  .fleet-catalog__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  @media (min-width: 56rem) {
+    .fleet-catalog__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .fleet-catalog__heading {
+    margin-top: 1rem;
+  }
+
+  .fleet-catalog__lead {
+    max-width: 38ch;
+  }
+
+  .fleet-catalog__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 1.5rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .fleet-catalog__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .fleet-filter {
+    min-height: 2.2rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      border-color var(--dur),
+      background var(--dur),
+      color var(--dur);
+  }
+
+  .fleet-filter:hover {
+    border-color: var(--line-strong);
+    color: var(--paper);
+  }
+
+  .fleet-filter.is-active {
+    border-color: var(--accent-ink);
+    background: var(--accent-soft);
+    color: var(--paper);
+  }
+
+  .fleet-catalog__count {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .fleet-catalog__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .fleet-catalog__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 68rem) {
+    .fleet-catalog__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .fleet-catalog__item[hidden] {
+    display: none;
+  }
+
+  .fleet-catalog__empty {
+    padding: 2rem 0;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  .fleet-catalog__compare {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .fleet-catalog__compare-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .fleet-catalog__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1.2rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 0.66rem;
+    line-height: 1.65;
+  }
+
+  .fleet-catalog__note svg {
+    flex: none;
+    margin-top: 0.12rem;
+    color: var(--accent-ink);
+  }
+
+  .fleet-catalog__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+    margin-top: 2rem;
+    padding: clamp(1.15rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+  }
+
+  .fleet-catalog__cta-title {
+    margin-bottom: 0.4rem;
+  }
+
+  .fleet-catalog__cta .copy {
+    max-width: 48ch;
+  }
+
+  .fleet-catalog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>

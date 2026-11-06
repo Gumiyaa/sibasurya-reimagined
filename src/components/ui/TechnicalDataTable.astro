@@ -1,0 +1,54 @@
+---
+interface Cell {
+  text: string;
+  accent?: boolean;
+  mono?: boolean;
+}
+
+interface Props {
+  caption?: string;
+  columns: string[];
+  rows: Array<Array<string | Cell>>;
+  minWidth?: string;
+  class?: string;
+  hover?: boolean;
+}
+
+const { caption, columns, rows, minWidth = '44rem', class: className, hover = true } = Astro.props;
+
+const normalize = (cell: string | Cell): Cell =>
+  typeof cell === 'string' ? { text: cell } : cell;
+---
+
+<div class:list={['table-scroll', className]} style={`--table-min: ${minWidth}`}>
+  <table class:list={['tech-table', { 'tech-table--hover': hover }]}>
+    {caption && <caption>{caption}</caption>}
+    <thead>
+      <tr>
+        {columns.map((column) => <th scope="col">{column}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          {row.map((raw) => {
+            const cell = normalize(raw);
+            return (
+              <td class:list={{ 'is-accent': cell.accent, num: cell.mono }}>{cell.text}</td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-scroll table {
+    min-width: var(--table-min);
+  }
+
+  .tech-table--hover tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+  }
+</style>

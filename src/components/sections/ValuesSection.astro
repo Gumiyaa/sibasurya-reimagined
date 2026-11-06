@@ -1,0 +1,237 @@
+---
+import { values } from '@/data/values';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<section class="values section section--surface" aria-labelledby="values-title">
+  <div class="shell">
+    <div class="values__head">
+      <div>
+        <SectionLabel index="07" text="AKTIF corporate values" />
+        <SectionHeading
+          id="values-title"
+          class="values__heading"
+          lines={[
+            { text: 'Lima prinsip,' },
+            { text: 'satu standar kerja.', accent: true },
+          ]}
+          size="h2"
+        />
+      </div>
+
+      <div class="values__aside">
+        <p class="copy">
+          AKTIF bukan akronim seremonial. Nilai ini menjadi dasar keputusan
+          operasional, penilaian pengemudi, dan cara kami menjaga kepercayaan
+          pelanggan industri.
+        </p>
+        <a class="link-arrow" href="/values/">
+          Selengkapnya tentang nilai
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+    </div>
+
+    <div class="values__grid">
+      {values.map((value) => (
+        <article class="value" data-reveal>
+          <div class="value__letter-wrap">
+            <span class="value__letter" aria-hidden="true">{value.letter}</span>
+            <span class="value__index num">{value.index} / 05</span>
+          </div>
+          <div class="value__body">
+            <h3 class="value__title">{value.title}</h3>
+            <p class="value__english">{value.english}</p>
+            <p class="value__desc">{value.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="values__strip">
+      <p class="values__strip-text">
+        <span class="accent-text">AKTIF</span> — Adaptasi · Kerja Sama · Tangguh · Integritas · Fokus pada Pelanggan
+      </p>
+      <a class="values__strip-link" href="/values/#integritas">
+        Komitmen integritas
+        <Icon name="shield" size={14} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .values__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.75rem, 3.2vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .values__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.75fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .values__heading {
+    margin-top: 1rem;
+  }
+
+  .values__aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .values__aside .copy {
+    max-width: 40ch;
+  }
+
+  .values__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line);
+  }
+
+  @media (min-width: 40rem) {
+    .values__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .values__grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  .value {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1rem, 1.8vw, 1.4rem);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: rgba(11, 14, 19, 0.16);
+    transition:
+      background var(--dur),
+      border-color var(--dur);
+  }
+
+  .value:hover {
+    background: rgba(11, 14, 19, 0.5);
+    border-color: var(--accent-line);
+  }
+
+  .value__letter-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .value__letter {
+    font-family: var(--font-display);
+    font-size: clamp(4.2rem, 7.5vw, 7rem);
+    font-weight: 600;
+    line-height: 0.7;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    transition: color var(--dur);
+  }
+
+  .value:hover .value__letter {
+    color: var(--accent-ink);
+  }
+
+  .value__index {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  .value__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-top: 0.9rem;
+  }
+
+  .value__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2vw, 1.85rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .value__english {
+    margin-top: 0.25rem;
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .value__desc {
+    margin-top: 0.8rem;
+    font-size: var(--fs-xs);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .values__strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem 1.5rem;
+    margin-top: 1.25rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .values__strip-text {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .values__strip-text .accent-text {
+    font-weight: 600;
+  }
+
+  .values__strip-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-micro);
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--paper-soft);
+    transition: color var(--dur);
+  }
+
+  .values__strip-link:hover {
+    color: var(--accent-ink);
+  }
+
+  .values__strip-link svg {
+    color: var(--accent-ink);
+  }
+</style>

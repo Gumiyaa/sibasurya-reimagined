@@ -1,0 +1,268 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import SectionLabel from '@/components/ui/SectionLabel.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import ServicePanel from '@/components/sections/ServicePanel.astro';
+import TechnicalDataTable from '@/components/ui/TechnicalDataTable.astro';
+import InformationPanel from '@/components/ui/InformationPanel.astro';
+import PrimaryButton from '@/components/ui/PrimaryButton.astro';
+import SecondaryButton from '@/components/ui/SecondaryButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { services, operationalSteps } from '@/data/services';
+import { images } from '@/data/images';
+
+const scopeRows = services.map((service) => [
+  { text: service.index, mono: true },
+  service.title,
+  service.metrics.map((metric) => metric.value).join(' · '),
+  service.bullets[0] ?? '',
+]);
+
+const imageHero = images.controlRoom;
+---
+
+<MainLayout
+  title="Layanan — PT Siba Surya"
+  description="Layanan angkutan muatan berat terintegrasi: pemantauan 24/7, bengkel mandiri dan preventive maintenance, serta komputerisasi ERP dan manifest digital."
+>
+  <PageHero
+    index="04"
+    label="Integrated operational services"
+    code="Service architecture · 03 layers"
+    titleLines={['Bukan sekadar', { text: 'mengangkut.', accent: true }]}
+    lead="Muatan berat menuntut sistem, bukan hanya unit. Tiga lapis layanan kami — pengawasan, perawatan, dan dokumentasi — bekerja sepanjang siklus pengiriman."
+    image={imageHero}
+    imageAlt="Operator memantau layar pemantauan di ruang kendali industri"
+    imageCaption="Ruang kendali operasional — fotografi stok sementara"
+    meta={[
+      { label: 'Pemantauan', value: 'Command desk 24/7' },
+      { label: 'Workshop', value: 'Central Workshop Semarang' },
+      { label: 'Dokumen', value: 'Manifest & e-POD digital' },
+      { label: 'Standar', value: 'ISO 39001 · ISO 9001' },
+    ]}
+  />
+
+  <section class="services-page section" aria-labelledby="service-layers-title">
+    <div class="shell">
+      <div class="services-page__head">
+        <div>
+          <SectionLabel index="01" text="Tiga lapis kendali" />
+          <SectionHeading
+            id="service-layers-title"
+            class="services-page__heading"
+            lines={['Satu perjalanan,', { text: 'tiga lapis pengaman.', accent: true }]}
+          />
+        </div>
+        <p class="copy services-page__lead">
+          Setiap layanan memiliki keluaran yang jelas: kondisi unit yang terverifikasi,
+          posisi muatan yang terpantau, dan dokumen serah terima yang dapat diaudit.
+        </p>
+      </div>
+
+      <div class="services-page__panels">
+        {services.map((service, index) => (
+          <ServicePanel service={service} reverse={index === 1} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="scope section section--ink-2" aria-labelledby="scope-title">
+    <div class="shell">
+      <div class="scope__head">
+        <SectionLabel index="02" text="Cakupan layanan" />
+        <h2 class="display display--h2 scope__title" id="scope-title">
+          Apa yang <span class="accent">Anda terima.</span>
+        </h2>
+      </div>
+
+      <TechnicalDataTable
+        caption="Matriks layanan — keluaran operasional"
+        columns={['Kode', 'Layanan', 'Keluaran utama', 'Kontrol kunci']}
+        rows={scopeRows}
+        minWidth="54rem"
+      />
+
+      <div class="scope__panels">
+        <InformationPanel label="Untuk tim supply chain" index="ERP" title="Visibilitas tanpa entri ulang">
+          <p>
+            Manifest digital dan e-POD dapat diintegrasikan dengan sistem rantai pasok
+            pelanggan melalui API. Status perjalanan dan konfirmasi serah terima
+            tersedia dalam satu alur data.
+          </p>
+        </InformationPanel>
+
+        <InformationPanel label="Untuk tim HSE" index="HSE" title="Keselamatan yang diperiksa">
+          <p>
+            Pemeriksaan unit sebelum berangkat, kalibrasi rem, dan audit checkpoint
+            menjadi bagian dari prosedur. Insiden dan deviasi dicatat untuk tindak lanjut.
+          </p>
+        </InformationPanel>
+
+        <InformationPanel label="Untuk manajemen aset" index="MNT" title="Perawatan preventif">
+          <p>
+            Jadwal pemeliharaan berbasis kondisi unit dan riwayat perjalanan. Stok suku
+            cadang orisinal dijaga untuk mengurangi waktu henti di lintasan.
+          </p>
+        </InformationPanel>
+      </div>
+    </div>
+  </section>
+
+  <section class="flow section" aria-labelledby="flow-title">
+    <div class="shell">
+      <div class="flow__head">
+        <SectionLabel index="03" text="Alur operasional" />
+        <h2 class="display display--h2 flow__title" id="flow-title">
+          Dari permintaan <span class="accent">hingga e-POD.</span>
+        </h2>
+      </div>
+
+      <ol class="flow__list">
+        {operationalSteps.map((step) => (
+          <li class="flow__step">
+            <span class="flow__index num">{step.index}</span>
+            <div class="flow__body">
+              <h3 class="flow__step-title">{step.title}</h3>
+              <p class="flow__desc">{step.description}</p>
+            </div>
+            <Icon name="chevron-right" size={16} />
+          </li>
+        ))}
+      </ol>
+
+      <div class="flow__cta">
+        <p class="copy">
+          Tim dispatch dapat memetakan kebutuhan Anda sebelum kontrak. Sertakan asal,
+          tujuan, tonase, dan karakter muatan untuk respons yang lebih cepat.
+        </p>
+        <div class="flow__actions">
+          <PrimaryButton href="/contact/" icon="arrow-right">Konsultasi kebutuhan</PrimaryButton>
+          <SecondaryButton href="/fleet/" icon="arrow-up-right">Lihat armada</SecondaryButton>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .services-page__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  @media (min-width: 56rem) {
+    .services-page__head {
+      grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.6fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .services-page__heading {
+    margin-top: 1rem;
+  }
+
+  .services-page__lead {
+    max-width: 36ch;
+  }
+
+  .services-page__panels {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Scope --------------------------------------------------------------- */
+  .scope__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .scope__panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 56rem) {
+    .scope__panels {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Flow ---------------------------------------------------------------- */
+  .flow__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .flow__list {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .flow__step {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: start;
+    padding-block: 1.15rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .flow__step > svg {
+    color: var(--dim);
+    margin-top: 0.2rem;
+  }
+
+  .flow__index {
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+    padding-top: 0.2rem;
+  }
+
+  .flow__step-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .flow__desc {
+    margin-top: 0.5rem;
+    max-width: 72ch;
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .flow__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2.5rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .flow__cta .copy {
+    max-width: 52ch;
+  }
+
+  .flow__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+</style>
