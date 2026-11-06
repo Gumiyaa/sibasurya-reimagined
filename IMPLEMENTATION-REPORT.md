@@ -208,7 +208,7 @@ The approved reference did not supply all official operational, editorial, HR, o
 - Branch contact data beyond the Semarang headquarters is withheld.
 - The inquiry form never fakes a successful submission. Without `PUBLIC_API_BASE_URL`, it reports `not-configured` and provides direct email/telephone fallbacks.
 - Photography is temporary licensed stock; no Siba Surya livery is fabricated.
-- The logo is a typographic placeholder.
+- The logo is the official Siba Surya artwork (source `sibasurya.png`), cropped to 900×793 and used in all site variants.
 - Certification, fleet availability, and commercial claims remain subject to official confirmation.
 
 ---
@@ -217,7 +217,7 @@ The approved reference did not supply all official operational, editorial, HR, o
 
 | Item | Owner |
 | --- | --- |
-| Official logo files and brand assets | PT Siba Surya |
+| Official logo files and brand assets | ✓ Integrated (`sibasurya.png`, 900×793) |
 | Official photography, including fleet without fabricated branding | PT Siba Surya |
 | Confirmed branch addresses and contact channels | PT Siba Surya |
 | Verified news articles and publication dates | Communications |

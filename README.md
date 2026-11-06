@@ -166,9 +166,9 @@ If the API is not configured, the contact form validates locally and honestly re
 
 ## Assets and placeholder policy
 
-No official Siba Surya photo library, logo file, or vehicle livery was supplied with the approved design reference.
+No official Siba Surya photo library or vehicle livery was supplied with the approved design reference. The official logo file (`sibasurya.png`) was provided after development and is now used throughout the site.
 
-- The logo is a typographic placeholder based on the wordmark in the reference.
+- The logo is the official Siba Surya artwork, cropped and resized to 900×793.
 - All photography in `src/assets/images/` consists of temporary licensed stock placeholders. No image fabricates Siba Surya vehicle branding or livery.
 - Replace the source files in `src/assets/images/` and update `src/data/images.ts` when official assets are available.
 - Confirm stock-photo licence terms before public launch, or replace them with owned company photography.
