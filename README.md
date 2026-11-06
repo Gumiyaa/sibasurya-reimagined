@@ -15,7 +15,7 @@ Dibangun sebagai situs statis dengan Astro, TypeScript, Tailwind CSS, dan optima
 ## Tampilan Halaman
 
 | | |
-| --- | --- |
+| :---: | :---: |
 | **Beranda**<br>![Beranda](docs/screenshots/home.webp) | **Tentang**<br>![Tentang](docs/screenshots/about.webp) |
 | **Layanan**<br>![Layanan](docs/screenshots/services.webp) | **Armada**<br>![Armada](docs/screenshots/fleet.webp) |
 | **Jaringan**<br>![Jaringan](docs/screenshots/network.webp) | **Nilai**<br>![Nilai](docs/screenshots/values.webp) |
