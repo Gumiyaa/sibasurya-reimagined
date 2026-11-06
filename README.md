@@ -12,4 +12,14 @@ Website company profile PT Siba Surya, perusahaan transportasi darat muatan bera
 
 Dibangun sebagai situs statis dengan Astro, TypeScript, Tailwind CSS, dan optimasi gambar Astro Assets. Konten terpusat di `src/data/`, akses data melalui `src/lib/api/`, serta desain responsif dengan tema industrial gelap.
 
-> Sebagian foto, berita, lowongan, dan data kontak masih placeholder. Form kontak belum terhubung ke backend produksi.
+## Tampilan Halaman
+
+| | |
+| --- | --- |
+| **Beranda**<br>![Beranda](docs/screenshots/home.webp) | **Tentang**<br>![Tentang](docs/screenshots/about.webp) |
+| **Layanan**<br>![Layanan](docs/screenshots/services.webp) | **Armada**<br>![Armada](docs/screenshots/fleet.webp) |
+| **Jaringan**<br>![Jaringan](docs/screenshots/network.webp) | **Nilai**<br>![Nilai](docs/screenshots/values.webp) |
+| **Berita**<br>![Berita](docs/screenshots/news.webp) | **Karier**<br>![Karier](docs/screenshots/careers.webp) |
+| **Kontak**<br>![Kontak](docs/screenshots/contact.webp) | **English Overview**<br>![English Overview](docs/screenshots/en.webp) |
+
+> Screenshot diambil pada viewport 1440×900. Foto masih placeholder dan berita/lowongan masih berstatus draft.
