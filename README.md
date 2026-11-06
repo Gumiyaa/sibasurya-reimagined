@@ -16,10 +16,10 @@ Dibangun sebagai situs statis dengan Astro, TypeScript, Tailwind CSS, dan optima
 
 | | |
 | :---: | :---: |
-| **Beranda**<br>![Beranda](docs/screenshots/home.webp) | **Tentang**<br>![Tentang](docs/screenshots/about.webp) |
-| **Layanan**<br>![Layanan](docs/screenshots/services.webp) | **Armada**<br>![Armada](docs/screenshots/fleet.webp) |
-| **Jaringan**<br>![Jaringan](docs/screenshots/network.webp) | **Nilai**<br>![Nilai](docs/screenshots/values.webp) |
-| **Berita**<br>![Berita](docs/screenshots/news.webp) | **Karier**<br>![Karier](docs/screenshots/careers.webp) |
-| **Kontak**<br>![Kontak](docs/screenshots/contact.webp) | **English Overview**<br>![English Overview](docs/screenshots/en.webp) |
+| **Beranda**<br><br>![Beranda](docs/screenshots/home.webp) | **Tentang**<br><br>![Tentang](docs/screenshots/about.webp) |
+| **Layanan**<br><br>![Layanan](docs/screenshots/services.webp) | **Armada**<br><br>![Armada](docs/screenshots/fleet.webp) |
+| **Jaringan**<br><br>![Jaringan](docs/screenshots/network.webp) | **Nilai**<br><br>![Nilai](docs/screenshots/values.webp) |
+| **Berita**<br><br>![Berita](docs/screenshots/news.webp) | **Karier**<br><br>![Karier](docs/screenshots/careers.webp) |
+| **Kontak**<br><br>![Kontak](docs/screenshots/contact.webp) | **English Overview**<br><br>![English Overview](docs/screenshots/en.webp) |
 
 > Screenshot diambil pada viewport 1440×900. Foto masih placeholder dan berita/lowongan masih berstatus draft.
