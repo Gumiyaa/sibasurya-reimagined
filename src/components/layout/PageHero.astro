@@ -272,8 +272,18 @@ const split = Boolean(image) || hasAside;
     border-right: 1px solid var(--line);
   }
 
+  .page-hero__meta-item + .page-hero__meta-item {
+    padding-left: 1rem;
+  }
+
   .page-hero__meta-item:last-child {
     border-right: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .page-hero__meta-item:nth-child(2n + 1) {
+      padding-left: 0;
+    }
   }
 
   .page-hero__meta-item dt {

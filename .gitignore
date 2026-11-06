@@ -22,3 +22,6 @@ Thumbs.db
 verification-report.json
 verify.mjs
 diag.mjs
+
+# Local QA screenshot
+Problem.jpeg

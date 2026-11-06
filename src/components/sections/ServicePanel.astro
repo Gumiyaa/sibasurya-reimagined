@@ -189,6 +189,10 @@ const { service, reverse = false } = Astro.props;
     border-right: 1px solid var(--line);
   }
 
+  .service-panel__metric + .service-panel__metric {
+    padding-left: 0.9rem;
+  }
+
   .service-panel__metric:last-child {
     border-right: 0;
     padding-right: 0;
@@ -218,6 +222,11 @@ const { service, reverse = false } = Astro.props;
       border-right: 0;
       border-bottom: 1px solid var(--line);
       padding-block: 0.65rem;
+      padding-inline: 0;
+    }
+
+    .service-panel__metric + .service-panel__metric {
+      padding-left: 0;
     }
 
     .service-panel__metric:last-child {
