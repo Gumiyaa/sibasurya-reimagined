@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://sibasurya.com/sitemap-index.xml
