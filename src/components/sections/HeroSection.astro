@@ -71,10 +71,6 @@ import Icon from '@/components/ui/Icon.astro';
 
         <span class="hero__scrim" aria-hidden="true"></span>
 
-        <div class="hero__badge">
-          <span>Active prime mover<br />on network</span>
-        </div>
-
         <p class="hero__vertical">Pantura · Trans-Jawa · Lintas Sumatra</p>
 
         <div class="hero__overlay">
@@ -297,25 +293,6 @@ import Icon from '@/components/ui/Icon.astro';
       linear-gradient(180deg, rgba(8, 10, 14, 0.55) 0%, rgba(8, 10, 14, 0.04) 34%, rgba(8, 10, 14, 0.82) 100%),
       linear-gradient(90deg, rgba(8, 10, 14, 0.4), transparent 45%);
     pointer-events: none;
-  }
-
-  .hero__badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.45rem 0.6rem;
-    border: 1px solid rgba(242, 242, 242, 0.18);
-    background: rgba(8, 10, 14, 0.62);
-    font-size: 0.58rem;
-    font-weight: 500;
-    line-height: 1.45;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--paper-soft);
-    backdrop-filter: blur(6px);
   }
 
   .hero__vertical {
